@@ -28,9 +28,9 @@ checkout: `pip install -e .` (in the directory of the git checkout).
 
 ## Usage as CLI tool
 
-After installation, the CLI utility `pygeom-scarf` is provided on your
-`$PATH`. This CLI utility is the primary way to interact with this package. For
-now, you can find usage docs by running `pygeom-scarf -h`.
+After installation, the CLI utility `pygeom-scarf` is provided on your `$PATH`.
+This CLI utility is the primary way to interact with this package. For now, you
+can find usage docs by running `pygeom-scarf -h`.
 
 In the simplest case, you can create a usable geometry file with:
 
