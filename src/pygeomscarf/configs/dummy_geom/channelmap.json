@@ -1,0 +1,1776 @@
+{
+  "V02160B": {
+    "name": "V02160B",
+    "system": "geds",
+    "location": {
+      "string": 1,
+      "position": 1
+    },
+    "daq": {
+      "rawid": 9000002
+    }
+  },
+  "V05261B": {
+    "name": "V05261B",
+    "system": "geds",
+    "location": {
+      "string": 1,
+      "position": 2
+    },
+    "daq": {
+      "rawid": 9000003
+    }
+  },
+  "V05266A": {
+    "name": "V05266A",
+    "system": "geds",
+    "location": {
+      "string": 1,
+      "position": 3
+    },
+    "daq": {
+      "rawid": 9000004
+    }
+  },
+  "V05266B": {
+    "name": "V05266B",
+    "system": "geds",
+    "location": {
+      "string": 1,
+      "position": 4
+    },
+    "daq": {
+      "rawid": 9000005
+    }
+  },
+  "V05268B": {
+    "name": "V05268B",
+    "system": "geds",
+    "location": {
+      "string": 1,
+      "position": 5
+    },
+    "daq": {
+      "rawid": 9000006
+    }
+  },
+  "V05612A": {
+    "name": "V05612A",
+    "system": "geds",
+    "location": {
+      "string": 1,
+      "position": 6
+    },
+    "daq": {
+      "rawid": 9000007
+    }
+  },
+  "V07647A": {
+    "name": "V07647A",
+    "system": "geds",
+    "location": {
+      "string": 1,
+      "position": 7
+    },
+    "daq": {
+      "rawid": 9000008
+    }
+  },
+  "V07647B": {
+    "name": "V07647B",
+    "system": "geds",
+    "location": {
+      "string": 1,
+      "position": 8
+    },
+    "daq": {
+      "rawid": 9000009
+    }
+  },
+  "B00035C": {
+    "name": "B00035C",
+    "system": "geds",
+    "location": {
+      "string": 2,
+      "position": 1
+    },
+    "daq": {
+      "rawid": 9000010
+    }
+  },
+  "C000RG1": {
+    "name": "C000RG1",
+    "system": "geds",
+    "location": {
+      "string": 2,
+      "position": 2
+    },
+    "daq": {
+      "rawid": 9000011
+    }
+  },
+  "C000RG2": {
+    "name": "C000RG2",
+    "system": "geds",
+    "location": {
+      "string": 2,
+      "position": 3
+    },
+    "daq": {
+      "rawid": 9000012
+    }
+  },
+  "C00ANG3": {
+    "name": "C00ANG3",
+    "system": "geds",
+    "location": {
+      "string": 2,
+      "position": 4
+    },
+    "daq": {
+      "rawid": 9000013
+    }
+  },
+  "C00ANG5": {
+    "name": "C00ANG5",
+    "system": "geds",
+    "location": {
+      "string": 2,
+      "position": 5
+    },
+    "daq": {
+      "rawid": 9000014
+    }
+  },
+  "C00ANG2": {
+    "name": "C00ANG2",
+    "system": "geds",
+    "location": {
+      "string": 2,
+      "position": 6
+    },
+    "daq": {
+      "rawid": 9000015
+    }
+  },
+  "V00074A": {
+    "name": "V00074A",
+    "system": "geds",
+    "location": {
+      "string": 2,
+      "position": 7
+    },
+    "daq": {
+      "rawid": 9000016
+    }
+  },
+  "V04549A": {
+    "name": "V04549A",
+    "system": "geds",
+    "location": {
+      "string": 2,
+      "position": 8
+    },
+    "daq": {
+      "rawid": 9000017
+    }
+  },
+  "V07298B": {
+    "name": "V07298B",
+    "system": "geds",
+    "location": {
+      "string": 2,
+      "position": 9
+    },
+    "daq": {
+      "rawid": 9000018
+    }
+  },
+  "B00032B": {
+    "name": "B00032B",
+    "system": "geds",
+    "location": {
+      "string": 3,
+      "position": 1
+    },
+    "daq": {
+      "rawid": 9000019
+    }
+  },
+  "B00091C": {
+    "name": "B00091C",
+    "system": "geds",
+    "location": {
+      "string": 3,
+      "position": 2
+    },
+    "daq": {
+      "rawid": 9000020
+    }
+  },
+  "P00574B": {
+    "name": "P00574B",
+    "system": "geds",
+    "location": {
+      "string": 3,
+      "position": 3
+    },
+    "daq": {
+      "rawid": 9000021
+    }
+  },
+  "P00665A": {
+    "name": "P00665A",
+    "system": "geds",
+    "location": {
+      "string": 3,
+      "position": 4
+    },
+    "daq": {
+      "rawid": 9000022
+    }
+  },
+  "P00698A": {
+    "name": "P00698A",
+    "system": "geds",
+    "location": {
+      "string": 3,
+      "position": 5
+    },
+    "daq": {
+      "rawid": 9000023
+    }
+  },
+  "P00712A": {
+    "name": "P00712A",
+    "system": "geds",
+    "location": {
+      "string": 3,
+      "position": 6
+    },
+    "daq": {
+      "rawid": 9000024
+    }
+  },
+  "P00909C": {
+    "name": "P00909C",
+    "system": "geds",
+    "location": {
+      "string": 3,
+      "position": 7
+    },
+    "daq": {
+      "rawid": 9000025
+    }
+  },
+  "P00661B": {
+    "name": "P00661B",
+    "system": "geds",
+    "location": {
+      "string": 3,
+      "position": 8
+    },
+    "daq": {
+      "rawid": 9000026
+    }
+  },
+  "P00574A": {
+    "name": "P00574A",
+    "system": "geds",
+    "location": {
+      "string": 3,
+      "position": 9
+    },
+    "daq": {
+      "rawid": 9000027
+    }
+  },
+  "B00000B": {
+    "name": "B00000B",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 1
+    },
+    "daq": {
+      "rawid": 9000028
+    }
+  },
+  "B00000C": {
+    "name": "B00000C",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 2
+    },
+    "daq": {
+      "rawid": 9000029
+    }
+  },
+  "B00061A": {
+    "name": "B00061A",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 3
+    },
+    "daq": {
+      "rawid": 9000030
+    }
+  },
+  "B00061C": {
+    "name": "B00061C",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 4
+    },
+    "daq": {
+      "rawid": 9000031
+    }
+  },
+  "B00076C": {
+    "name": "B00076C",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 5
+    },
+    "daq": {
+      "rawid": 9000032
+    }
+  },
+  "B00079B": {
+    "name": "B00079B",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 6
+    },
+    "daq": {
+      "rawid": 9000033
+    }
+  },
+  "B00079C": {
+    "name": "B00079C",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 7
+    },
+    "daq": {
+      "rawid": 9000034
+    }
+  },
+  "V01386A": {
+    "name": "V01386A",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 8
+    },
+    "daq": {
+      "rawid": 9000035
+    }
+  },
+  "V01403A": {
+    "name": "V01403A",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 9
+    },
+    "daq": {
+      "rawid": 9000036
+    }
+  },
+  "V01404A": {
+    "name": "V01404A",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 10
+    },
+    "daq": {
+      "rawid": 9000037
+    }
+  },
+  "V01406A": {
+    "name": "V01406A",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 11
+    },
+    "daq": {
+      "rawid": 9000038
+    }
+  },
+  "V01415A": {
+    "name": "V01415A",
+    "system": "geds",
+    "location": {
+      "string": 4,
+      "position": 12
+    },
+    "daq": {
+      "rawid": 9000039
+    }
+  },
+  "V08682B": {
+    "name": "V08682B",
+    "system": "geds",
+    "location": {
+      "string": 5,
+      "position": 1
+    },
+    "daq": {
+      "rawid": 9000040
+    }
+  },
+  "V08682A": {
+    "name": "V08682A",
+    "system": "geds",
+    "location": {
+      "string": 5,
+      "position": 2
+    },
+    "daq": {
+      "rawid": 9000041
+    }
+  },
+  "V09372A": {
+    "name": "V09372A",
+    "system": "geds",
+    "location": {
+      "string": 5,
+      "position": 3
+    },
+    "daq": {
+      "rawid": 9000042
+    }
+  },
+  "V09374A": {
+    "name": "V09374A",
+    "system": "geds",
+    "location": {
+      "string": 5,
+      "position": 4
+    },
+    "daq": {
+      "rawid": 9000043
+    }
+  },
+  "V09724A": {
+    "name": "V09724A",
+    "system": "geds",
+    "location": {
+      "string": 5,
+      "position": 5
+    },
+    "daq": {
+      "rawid": 9000044
+    }
+  },
+  "V02166B": {
+    "name": "V02166B",
+    "system": "geds",
+    "location": {
+      "string": 7,
+      "position": 1
+    },
+    "daq": {
+      "rawid": 9000046
+    }
+  },
+  "V04199A": {
+    "name": "V04199A",
+    "system": "geds",
+    "location": {
+      "string": 7,
+      "position": 2
+    },
+    "daq": {
+      "rawid": 9000047
+    }
+  },
+  "V04545A": {
+    "name": "V04545A",
+    "system": "geds",
+    "location": {
+      "string": 7,
+      "position": 3
+    },
+    "daq": {
+      "rawid": 9000048
+    }
+  },
+  "V05267B": {
+    "name": "V05267B",
+    "system": "geds",
+    "location": {
+      "string": 7,
+      "position": 4
+    },
+    "daq": {
+      "rawid": 9000049
+    }
+  },
+  "V07302B": {
+    "name": "V07302B",
+    "system": "geds",
+    "location": {
+      "string": 7,
+      "position": 5
+    },
+    "daq": {
+      "rawid": 9000051
+    }
+  },
+  "B00089C": {
+    "name": "B00089C",
+    "system": "geds",
+    "location": {
+      "string": 8,
+      "position": 1
+    },
+    "daq": {
+      "rawid": 9000052
+    }
+  },
+  "B00089D": {
+    "name": "B00089D",
+    "system": "geds",
+    "location": {
+      "string": 8,
+      "position": 2
+    },
+    "daq": {
+      "rawid": 9000053
+    }
+  },
+  "C00ANG4": {
+    "name": "C00ANG4",
+    "system": "geds",
+    "location": {
+      "string": 8,
+      "position": 3
+    },
+    "daq": {
+      "rawid": 9000054
+    }
+  },
+  "V00048B": {
+    "name": "V00048B",
+    "system": "geds",
+    "location": {
+      "string": 8,
+      "position": 4
+    },
+    "daq": {
+      "rawid": 9000055
+    }
+  },
+  "V00050A": {
+    "name": "V00050A",
+    "system": "geds",
+    "location": {
+      "string": 8,
+      "position": 5
+    },
+    "daq": {
+      "rawid": 9000056
+    }
+  },
+  "V00050B": {
+    "name": "V00050B",
+    "system": "geds",
+    "location": {
+      "string": 8,
+      "position": 6
+    },
+    "daq": {
+      "rawid": 9000057
+    }
+  },
+  "V01387A": {
+    "name": "V01387A",
+    "system": "geds",
+    "location": {
+      "string": 8,
+      "position": 7
+    },
+    "daq": {
+      "rawid": 9000058
+    }
+  },
+  "V05261A": {
+    "name": "V05261A",
+    "system": "geds",
+    "location": {
+      "string": 8,
+      "position": 8
+    },
+    "daq": {
+      "rawid": 9000059
+    }
+  },
+  "V05268A": {
+    "name": "V05268A",
+    "system": "geds",
+    "location": {
+      "string": 8,
+      "position": 9
+    },
+    "daq": {
+      "rawid": 9000060
+    }
+  },
+  "V07302A": {
+    "name": "V07302A",
+    "system": "geds",
+    "location": {
+      "string": 8,
+      "position": 10
+    },
+    "daq": {
+      "rawid": 9000061
+    }
+  },
+  "B00002A": {
+    "name": "B00002A",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 1
+    },
+    "daq": {
+      "rawid": 9000062
+    }
+  },
+  "B00089A": {
+    "name": "B00089A",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 2
+    },
+    "daq": {
+      "rawid": 9000063
+    }
+  },
+  "B00091A": {
+    "name": "B00091A",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 3
+    },
+    "daq": {
+      "rawid": 9000064
+    }
+  },
+  "B00091D": {
+    "name": "B00091D",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 4
+    },
+    "daq": {
+      "rawid": 9000065
+    }
+  },
+  "P00537A": {
+    "name": "P00537A",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 5
+    },
+    "daq": {
+      "rawid": 9000066
+    }
+  },
+  "P00538A": {
+    "name": "P00538A",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 6
+    },
+    "daq": {
+      "rawid": 9000067
+    }
+  },
+  "P00573A": {
+    "name": "P00573A",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 7
+    },
+    "daq": {
+      "rawid": 9000068
+    }
+  },
+  "P00661C": {
+    "name": "P00661C",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 8
+    },
+    "daq": {
+      "rawid": 9000069
+    }
+  },
+  "P00662C": {
+    "name": "P00662C",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 9
+    },
+    "daq": {
+      "rawid": 9000070
+    }
+  },
+  "P00664A": {
+    "name": "P00664A",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 10
+    },
+    "daq": {
+      "rawid": 9000071
+    }
+  },
+  "P00665C": {
+    "name": "P00665C",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 11
+    },
+    "daq": {
+      "rawid": 9000072
+    }
+  },
+  "P00748B": {
+    "name": "P00748B",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 12
+    },
+    "daq": {
+      "rawid": 9000073
+    }
+  },
+  "P00909B": {
+    "name": "P00909B",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 13
+    },
+    "daq": {
+      "rawid": 9000074
+    }
+  },
+  "B00091B": {
+    "name": "B00091B",
+    "system": "geds",
+    "location": {
+      "string": 9,
+      "position": 14
+    },
+    "daq": {
+      "rawid": 9000075
+    }
+  },
+  "B00000D": {
+    "name": "B00000D",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 1
+    },
+    "daq": {
+      "rawid": 9000076
+    }
+  },
+  "B00002C": {
+    "name": "B00002C",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 2
+    },
+    "daq": {
+      "rawid": 9000077
+    }
+  },
+  "B00032C": {
+    "name": "B00032C",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 3
+    },
+    "daq": {
+      "rawid": 9000078
+    }
+  },
+  "B00032D": {
+    "name": "B00032D",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 4
+    },
+    "daq": {
+      "rawid": 9000079
+    }
+  },
+  "B00035A": {
+    "name": "B00035A",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 5
+    },
+    "daq": {
+      "rawid": 9000080
+    }
+  },
+  "B00035B": {
+    "name": "B00035B",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 6
+    },
+    "daq": {
+      "rawid": 9000081
+    }
+  },
+  "B00061B": {
+    "name": "B00061B",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 7
+    },
+    "daq": {
+      "rawid": 9000082
+    }
+  },
+  "B00089B": {
+    "name": "B00089B",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 8
+    },
+    "daq": {
+      "rawid": 9000083
+    }
+  },
+  "V00048A": {
+    "name": "V00048A",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 9
+    },
+    "daq": {
+      "rawid": 9000084
+    }
+  },
+  "V01240A": {
+    "name": "V01240A",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 10
+    },
+    "daq": {
+      "rawid": 9000085
+    }
+  },
+  "V01389A": {
+    "name": "V01389A",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 11
+    },
+    "daq": {
+      "rawid": 9000086
+    }
+  },
+  "V05267A": {
+    "name": "V05267A",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 12
+    },
+    "daq": {
+      "rawid": 9000087
+    }
+  },
+  "V05612B": {
+    "name": "V05612B",
+    "system": "geds",
+    "location": {
+      "string": 10,
+      "position": 13
+    },
+    "daq": {
+      "rawid": 9000088
+    }
+  },
+  "B00000A": {
+    "name": "B00000A",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 1
+    },
+    "daq": {
+      "rawid": 9000089
+    }
+  },
+  "B00002B": {
+    "name": "B00002B",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 2
+    },
+    "daq": {
+      "rawid": 9000090
+    }
+  },
+  "B00032A": {
+    "name": "B00032A",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 3
+    },
+    "daq": {
+      "rawid": 9000091
+    }
+  },
+  "P00538B": {
+    "name": "P00538B",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 4
+    },
+    "daq": {
+      "rawid": 9000092
+    }
+  },
+  "P00573B": {
+    "name": "P00573B",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 5
+    },
+    "daq": {
+      "rawid": 9000093
+    }
+  },
+  "P00575A": {
+    "name": "P00575A",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 6
+    },
+    "daq": {
+      "rawid": 9000094
+    }
+  },
+  "P00574C": {
+    "name": "P00574C",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 7
+    },
+    "daq": {
+      "rawid": 9000095
+    }
+  },
+  "P00661A": {
+    "name": "P00661A",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 8
+    },
+    "daq": {
+      "rawid": 9000096
+    }
+  },
+  "P00662A": {
+    "name": "P00662A",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 9
+    },
+    "daq": {
+      "rawid": 9000097
+    }
+  },
+  "P00662B": {
+    "name": "P00662B",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 10
+    },
+    "daq": {
+      "rawid": 9000098
+    }
+  },
+  "P00665B": {
+    "name": "P00665B",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 11
+    },
+    "daq": {
+      "rawid": 9000099
+    }
+  },
+  "P00748A": {
+    "name": "P00748A",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 12
+    },
+    "daq": {
+      "rawid": 9000100
+    }
+  },
+  "P00698B": {
+    "name": "P00698B",
+    "system": "geds",
+    "location": {
+      "string": 11,
+      "position": 13
+    },
+    "daq": {
+      "rawid": 9000101
+    }
+  },
+  "S060": {
+    "name": "S060",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB015016",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000102
+    }
+  },
+  "S061": {
+    "name": "S061",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB015016",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000103
+    }
+  },
+  "S055": {
+    "name": "S055",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB005006",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000104
+    }
+  },
+  "S054": {
+    "name": "S054",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB005006",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000105
+    }
+  },
+  "S013": {
+    "name": "S013",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB007008",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000106
+    }
+  },
+  "S017": {
+    "name": "S017",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB007008",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000107
+    }
+  },
+  "S074": {
+    "name": "S074",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB017018",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000108
+    }
+  },
+  "S073": {
+    "name": "S073",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB017018",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000109
+    }
+  },
+  "S071": {
+    "name": "S071",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB001002",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000110
+    }
+  },
+  "S070": {
+    "name": "S070",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB001002",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000111
+    }
+  },
+  "S067": {
+    "name": "S067",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB021022",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000112
+    }
+  },
+  "S068": {
+    "name": "S068",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB021022",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000113
+    }
+  },
+  "S056": {
+    "name": "S056",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB003004",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000114
+    }
+  },
+  "S029": {
+    "name": "S029",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB003004",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000115
+    }
+  },
+  "S042": {
+    "name": "S042",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB023024",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000116
+    }
+  },
+  "S041": {
+    "name": "S041",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB023024",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000117
+    }
+  },
+  "S024": {
+    "name": "S024",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB005006",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000118
+    }
+  },
+  "S023": {
+    "name": "S023",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB005006",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000119
+    }
+  },
+  "S030": {
+    "name": "S030",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB009010",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000120
+    }
+  },
+  "S031": {
+    "name": "S031",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB009010",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000121
+    }
+  },
+  "S002": {
+    "name": "S002",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB007008",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000122
+    }
+  },
+  "S003": {
+    "name": "S003",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB007008",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000123
+    }
+  },
+  "S032": {
+    "name": "S032",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB009010",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000124
+    }
+  },
+  "S036": {
+    "name": "S036",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB009010",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000125
+    }
+  },
+  "S028": {
+    "name": "S028",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB011012",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000126
+    }
+  },
+  "S027": {
+    "name": "S027",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB011012",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000127
+    }
+  },
+  "S010": {
+    "name": "S010",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB019020",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000128
+    }
+  },
+  "S008": {
+    "name": "S008",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB019020",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000129
+    }
+  },
+  "S058": {
+    "name": "S058",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB011012",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000130
+    }
+  },
+  "S057": {
+    "name": "S057",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB011012",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000131
+    }
+  },
+  "S022": {
+    "name": "S022",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB013014",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000132
+    }
+  },
+  "S021": {
+    "name": "S021",
+    "system": "spms",
+    "location": {
+      "barrel": "IB",
+      "fiber": "IB013014",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000133
+    }
+  },
+  "S064": {
+    "name": "S064",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB025026",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000134
+    }
+  },
+  "S065": {
+    "name": "S065",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB025026",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000135
+    }
+  },
+  "S009": {
+    "name": "S009",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB027028",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000136
+    }
+  },
+  "S007": {
+    "name": "S007",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB027028",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000137
+    }
+  },
+  "S046": {
+    "name": "S046",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB017018",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000138
+    }
+  },
+  "S047": {
+    "name": "S047",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB017018",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000139
+    }
+  },
+  "S011": {
+    "name": "S011",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB015016",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000140
+    }
+  },
+  "S012": {
+    "name": "S012",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB015016",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000141
+    }
+  },
+  "S020": {
+    "name": "S020",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB029030",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000142
+    }
+  },
+  "S019": {
+    "name": "S019",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB029030",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000143
+    }
+  },
+  "S026": {
+    "name": "S026",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB031032",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000144
+    }
+  },
+  "S025": {
+    "name": "S025",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB031032",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000145
+    }
+  },
+  "S015": {
+    "name": "S015",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB033034",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000146
+    }
+  },
+  "S033": {
+    "name": "S033",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB033034",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000147
+    }
+  },
+  "S043": {
+    "name": "S043",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB013014",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000148
+    }
+  },
+  "S040": {
+    "name": "S040",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB013014",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000149
+    }
+  },
+  "S048": {
+    "name": "S048",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB035036",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000150
+    }
+  },
+  "S049": {
+    "name": "S049",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB035036",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000151
+    }
+  },
+  "S053": {
+    "name": "S053",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB037038",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000152
+    }
+  },
+  "S052": {
+    "name": "S052",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB037038",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000153
+    }
+  },
+  "S050": {
+    "name": "S050",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB039040",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000154
+    }
+  },
+  "S051": {
+    "name": "S051",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB039040",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000155
+    }
+  },
+  "S045": {
+    "name": "S045",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB001002",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000156
+    }
+  },
+  "S044": {
+    "name": "S044",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB001002",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000157
+    }
+  },
+  "S037": {
+    "name": "S037",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB003004",
+      "position": "top"
+    },
+    "daq": {
+      "rawid": 9000158
+    }
+  },
+  "S035": {
+    "name": "S035",
+    "system": "spms",
+    "location": {
+      "barrel": "OB",
+      "fiber": "OB003004",
+      "position": "bottom"
+    },
+    "daq": {
+      "rawid": 9000159
+    }
+  }
+}

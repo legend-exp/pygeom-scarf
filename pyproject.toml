@@ -1,0 +1,145 @@
+[build-system]
+requires = [
+    "setuptools>=61.2",
+    "setuptools_scm[toml]>=7"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pygeom_scarf"
+description = "Geometry model of the SCARF experiment"
+authors = [
+    { name = "Luigi Pertoldi", email = "gipert@pm.me" },
+]
+maintainers = [
+    { name = "The LEGEND Collaboration" },
+]
+readme = "README.md"
+license.file = "LICENSE"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "dbetto",
+    "legend-pygeom-hpges >=0.7.0",
+    "legend-pygeom-tools >=0.0.23",
+    "numpy",
+    "pint",
+    "pyg4ometry >=1.3.4",
+    "pylegendmeta >=1.3.1",
+    "pyyaml",
+]
+dynamic = [
+    "version",
+]
+
+[project.urls]
+Homepage = "https://github.com/legend-exp/pygeom-scarf"
+"Bug Tracker" = "https://github.com/legend-exp/pygeom-scarf/issues"
+Discussions = "https://github.com/legend-exp/pygeom-scarf/discussions"
+Changelog = "https://github.com/legend-exp/pygeom-scarf/releases"
+
+[tool.setuptools_scm]
+write_to = "src/pygeomscarf/_version.py"
+
+[project.optional-dependencies]
+all = [
+    "pygeom-scarf[docs,test]",
+]
+docs = [
+    "furo",
+    "myst-parser",
+    "sphinx",
+    "sphinx-copybutton",
+    "sphinx-subfigure",
+]
+test = [
+    "pre-commit",
+    "pylegendtestdata",
+    "pytest>=6.0",
+    "pytest-cov",
+]
+
+[project.scripts]
+pygeom-scarf = "pygeomscarf.cli:dump_gdml_cli"
+
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
+license-files = [
+    "LICENSE",
+]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.packages.find]
+where = [
+    "src",
+]
+namespaces = false
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+xfail_strict = true
+filterwarnings = "error"
+log_cli_level = "info"
+testpaths = "tests"
+
+[tool.codespell]
+ignore-words-list = "manuel,tre"
+
+[tool.ruff]
+src = ["src"]
+line-length = 110
+
+[tool.ruff.lint]
+extend-select = [
+  "B",        # flake8-bugbear
+  "I",        # isort
+  "C4",       # flake8-comprehensions
+  "EM",       # flake8-errmsg
+  "ICN",      # flake8-import-conventions
+  "G",        # flake8-logging-format
+  "PGH",      # pygrep-hooks
+  "PIE",      # flake8-pie
+  "PL",       # pylint
+  "PT",       # flake8-pytest-style
+  "PTH",      # flake8-use-pathlib
+  "RET",      # flake8-return
+  "RUF",      # Ruff-specific
+  "SIM",      # flake8-simplify
+  "T20",      # flake8-print
+  "UP",       # pyupgrade
+  "YTT",      # flake8-2020
+  "EXE",      # flake8-executable
+  "NPY",      # NumPy specific rules
+  "PD",       # pandas-vet
+  "N",        # pep8-naming
+]
+ignore = [
+  "PLR09",    # Too many <...>
+  "PLR2004",  # Magic value used in comparison
+  "ISC001",   # Conflicts with formatter
+  "PT011",    # too picky pytest.raises() complaint
+  "PLC0415",  # we sometimes use relative imports for performance reasons
+  "PLC2401",  # we like greek letters
+  "PLC2403",  # we _still_ like greek letters
+  "RUF003",   # we like greek letters ("σ" _of course_ totally looks like an "o"...) and math symbols like "×"
+]
+isort.required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["T20"]
+"noxfile.py" = ["T20"]
