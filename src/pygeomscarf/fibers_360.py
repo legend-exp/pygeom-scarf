@@ -104,6 +104,10 @@ def build_fiber_shroud(
     # ------------------------------------------------------------------
     # 5) Collect SiPM physical volumes
     # ------------------------------------------------------------------
-    sipms = {pv.name: pv for pv in registry.physicalVolumeDict.values() if pv.name.startswith("sipm_")}
 
-    return sipms
+    return {
+        pv.name: pv
+        for pv in registry.physicalVolumeDict.values()
+        if pv.name.startswith("sipm_")
+    }
+

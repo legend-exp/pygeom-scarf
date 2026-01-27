@@ -93,7 +93,7 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
         )
 
         # Photon energies in eV (ascending)
-        E = [
+        energies = [
             0.5,  # IR
             1.24,  # 1000 nm  (turn on)
             3.10,  # 400 nm   (turn off)
@@ -101,7 +101,7 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
         ]
 
         # Quantum efficiency (PDE)
-        QE = [
+        qe = [
             0.0,  # below 1000 nm
             1.0,  # fully sensitive
             1.0,  # fully sensitive
@@ -109,10 +109,10 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
         ]
 
         # Reflection
-        R = [0.0, 0.0, 0.0, 0.0]
+        reflectivity = [0.0, 0.0, 0.0, 0.0]
 
-        self.surfaces.to_sipm_silicon.addVecProperty("EFFICIENCY", E, QE)
-        self.surfaces.to_sipm_silicon.addVecProperty("REFLECTIVITY", E, R)
+        self.surfaces.to_sipm_silicon.addVecProperty("EFFICIENCY", energies, qe)
+        self.surfaces.to_sipm_silicon.addVecProperty("REFLECTIVITY", energies, reflectivity)
 
     @pg_cached_property
     def liquidargon(self) -> g4.Material:
@@ -216,7 +216,7 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
 
     @pg_cached_property
     def os_fibers(self) -> g4.solid.OpticalSurface:
-        osurf = g4.solid.OpticalSurface(
+        return g4.solid.OpticalSurface(
             name="os_fibers",
             model="unified",
             finish="polished",
@@ -224,7 +224,6 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
             value=1.0,
             registry=self.g4_registry,
         )
-        return osurf
 
     @pg_cached_property
     def pen(self) -> g4.Material:
@@ -310,15 +309,13 @@ def make_closed_cylinder_mm(name, inner_r_mm, outer_r_mm, height_mm, thickness_m
         registry=reg,
     )
 
-    enclosure_full = solid.Union(
+    return solid.Union(
         f"{name}_union_full",
         enclosure_top,
         cap,
         tra2=([0.0, 0.0, 0.0], [0.0, 0.0, -half_h / 2, "mm"]),
         registry=reg,
     )
-
-    return enclosure_full
 
 
 def build_geometry():
@@ -404,24 +401,6 @@ def build_geometry():
             "taper": {
                 "top": {"angle_in_deg": 0.0, "height_in_mm": 0.0},
                 "bottom": {"angle_in_deg": 45.0, "height_in_mm": 8.0},
-            },
-        },
-    }
-
-    coax_meta = {
-        "name": "C000RG1",
-        "type": "coax",
-        "production": {"enrichment": {"val": 0.855, "unc": 0.015}},
-        "geometry": {
-            "height_in_mm": 40.0,
-            "radius_in_mm": 38.25,
-            "borehole": {"radius_in_mm": 6.75, "depth_in_mm": 40},
-            "groove": {"depth_in_mm": 2, "radius_in_mm": {"outer": 20, "inner": 17}},
-            "pp_contact": {"radius_in_mm": 17, "depth_in_mm": 0},
-            "taper": {
-                "top": {"angle_in_deg": 45, "height_in_mm": 5},
-                "bottom": {"angle_in_deg": 45, "height_in_mm": 2},
-                "borehole": {"angle_in_deg": 0, "height_in_mm": 0},
             },
         },
     }
