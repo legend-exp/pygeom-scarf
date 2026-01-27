@@ -17,18 +17,23 @@ Notes:
 
 # NOTE: Fiber optics use pygeomoptics when available, with a fallback to legendoptics
 
-
 from __future__ import annotations
+
+import math
+
+import pint
 import pyg4ometry.geant4 as g4
-import pint, math
-import pyg4ometry.geant4.solid as solid
-from pygeomscarf.fibers_360 import build_fiber_shroud
-from pygeomtools import RemageDetectorInfo, write_pygeom
+from pyg4ometry.geant4 import solid
 from pyg4ometry.visualisation import VtkViewer
+from pygeomtools import RemageDetectorInfo, write_pygeom
 from pygeomtools.materials import (
     BaseMaterialRegistry,
+)
+from pygeomtools.materials import (
     cached_property as pg_cached_property,
 )
+
+from pygeomscarf.fibers_360 import build_fiber_shroud
 
 try:
     from pygeomhpges import make_hpge
@@ -36,15 +41,9 @@ except ImportError:
     from legendhpges import make_hpge
 
 try:
-    import pygeomoptics.tpb as tpb
-    import pygeomoptics.pen as pen
-    import pygeomoptics.lar as lar
-    import pygeomoptics.fibers as fibers
+    from pygeomoptics import fibers, lar, pen, tpb
 except ImportError:
-    import legendoptics.tpb as tpb
-    import legendoptics.pen as pen
-    import legendoptics.lar as lar
-    import legendoptics.fibers as fibers
+    from legendoptics import fibers, lar, pen, tpb
 
 
 u = pint.get_application_registry()
@@ -137,9 +136,7 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
             rayleigh_enabled_or_length=True,
             absorption_enabled_or_length=True,
         )
-        lar.pyg4_lar_attach_scintillation(
-            _lar, self.g4_registry, flat_top_yield=1000 / u.MeV
-        )
+        lar.pyg4_lar_attach_scintillation(_lar, self.g4_registry, flat_top_yield=1000 / u.MeV)
         return _lar
 
     @pg_cached_property
@@ -271,10 +268,7 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
         return m
 
 
-
-def make_closed_cylinder_mm(
-    name, inner_r_mm, outer_r_mm, height_mm, thickness_mm, reg, plate_extra_r_mm
-):
+def make_closed_cylinder_mm(name, inner_r_mm, outer_r_mm, height_mm, thickness_mm, reg, plate_extra_r_mm):
     """
     Create a closed cylinder (wall + top & bottom plates) in mm. Returns a solid (union).
     inner_r_mm: inner radius in mm
@@ -328,7 +322,6 @@ def make_closed_cylinder_mm(
 
 
 def build_geometry():
-
     reg = g4.Registry()
     reg.userInfo = []
 
@@ -347,9 +340,7 @@ def build_geometry():
     # -----------------------------
     # World half-sizes: originally 200 cm -> 2000 mm
     world_half_mm = 500.0
-    world_s = solid.Box(
-        "world_s", world_half_mm, world_half_mm, world_half_mm, registry=reg, lunit="mm"
-    )
+    world_s = solid.Box("world_s", world_half_mm, world_half_mm, world_half_mm, registry=reg, lunit="mm")
     world_lv = g4.LogicalVolume(world_s, mats.liquidargon, "World_lv", registry=reg)
     reg.setWorld(world_lv)
 
@@ -366,12 +357,8 @@ def build_geometry():
         registry=reg,
         lunit="mm",
     )
-    lar_lv = g4.LogicalVolume(
-        lar_s, mats.liquidargon, "LAr_lv", registry=reg, lunit="mm"
-    )
-    lar_pv = g4.PhysicalVolume(
-        [0, 0, 0], [0, 0, 0, "mm"], lar_lv, "LAr_pv", world_lv, registry=reg
-    )
+    lar_lv = g4.LogicalVolume(lar_s, mats.liquidargon, "LAr_lv", registry=reg, lunit="mm")
+    lar_pv = g4.PhysicalVolume([0, 0, 0], [0, 0, 0, "mm"], lar_lv, "LAr_pv", world_lv, registry=reg)
 
     lar_pv = reg.physicalVolumeDict["LAr_pv"]
 
@@ -468,7 +455,6 @@ def build_geometry():
         registry=reg,
     )
 
-    #
     enclosure_bege_solid = make_closed_cylinder_mm(
         "enclosure_bege",
         inner_r_mm=37.5,  # mm
@@ -489,12 +475,8 @@ def build_geometry():
         plate_extra_r_mm=5.0,
     )
 
-    enclosure_bege_lv = g4.LogicalVolume(
-        enclosure_bege_solid, mats.pen, "enclosure_bege_lv", registry=reg
-    )
-    enclosure_icpc_lv = g4.LogicalVolume(
-        enclosure_icpc_solid, mats.pen, "enclosure_icpc_lv", registry=reg
-    )
+    enclosure_bege_lv = g4.LogicalVolume(enclosure_bege_solid, mats.pen, "enclosure_bege_lv", registry=reg)
+    enclosure_icpc_lv = g4.LogicalVolume(enclosure_icpc_solid, mats.pen, "enclosure_icpc_lv", registry=reg)
 
     # ============================================================
     # Fiber shroud + SiPMs
@@ -616,9 +598,7 @@ def build_geometry():
     enclosure_icpc_pv.pygeom_active_detector = RemageDetectorInfo(
         "scintillator", 202, "name:enclosure_icpc_pv"
     )
-    lar_pv.pygeom_active_detector = RemageDetectorInfo(
-        "scintillator", 401, {"name": "LAr_pv"}
-    )
+    lar_pv.pygeom_active_detector = RemageDetectorInfo("scintillator", 401, {"name": "LAr_pv"})
 
     print("\nRegistered optical detectors:")
     for pv in reg.physicalVolumeDict.values():

@@ -30,7 +30,6 @@ def build_fiber_shroud(
     hpge_string,
     materials,
 ):
-
     """
     Build a 360° LEGEND fiber shroud with SiPMs inside an existing
     LAr physical volume.
@@ -105,10 +104,6 @@ def build_fiber_shroud(
     # ------------------------------------------------------------------
     # 5) Collect SiPM physical volumes
     # ------------------------------------------------------------------
-    sipms = {
-        pv.name: pv
-        for pv in registry.physicalVolumeDict.values()
-        if pv.name.startswith("sipm_")
-    }
+    sipms = {pv.name: pv for pv in registry.physicalVolumeDict.values() if pv.name.startswith("sipm_")}
 
     return sipms
