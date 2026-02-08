@@ -69,7 +69,7 @@ def inner_cryostat_profile() -> tuple[list, list]:
 def lar_profile() -> tuple[list, list]:
     """Extract the profile of the lar volume.
 
-    The geometry is similar to {func}:`extract_inner_cryostat_profile`
+    The geometry is similar to :func:`extract_inner_cryostat_profile`
     but slightly shifted to account for the cryostat thickness.
 
     Warning
@@ -103,7 +103,7 @@ def lar_profile() -> tuple[list, list]:
 def gaseous_argon_profile() -> tuple[list, list]:
     """Extract the profile of the gaseous argon volume.
 
-    The geometry is similar to {func}:`extract_inner_cryostat_profile`
+    The geometry is similar to :func:`extract_inner_cryostat_profile`
     but slightly shifted to account for the cryostat thickness and the LAr volume.
 
     Warning
