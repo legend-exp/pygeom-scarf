@@ -10,7 +10,7 @@ class PublicMetadataProxy:
     """Provides proxies to transparently replace legend hardware metadata with sample data."""
 
     def __init__(self):
-        dummy = TextDB(resources.files("pygeomhades") / "configs" / "dummy_geom")
+        dummy = TextDB(resources.files("pygeomscarf") / "configs" / "dummy_geom")
 
         self.hardware = AttrsDict({"detectors": {"germanium": {"diodes": _DiodeProxy(dummy)}}})
 
