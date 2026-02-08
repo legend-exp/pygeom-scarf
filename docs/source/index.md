@@ -38,6 +38,23 @@ In the simplest case, you can create a usable geometry file with:
 $ pygeom-scarf scarf.gdml
 ```
 
+## Configuration
+
+To include HPGe detectors, fibers or the calibration source in the geometry it
+is possible to include a configuration file. This should have the following
+format:
+
+```yaml
+hpges:
+  - name: "V09999A" # name of the detector
+    pplus_pos_from_lar_center: 0 # position from the center of the LAr
+
+  # ... multiple HPGe's can be specified
+
+source:
+  pos_from_lar_center: 0 # position from the center of the LAr
+```
+
 ```{toctree}
 :maxdepth: 1
 :caption: Development

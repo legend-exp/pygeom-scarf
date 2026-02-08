@@ -17,6 +17,11 @@ def build_source(
 ) -> geant4.LogicalVolume:
     """Build the source holder and source for the SCARF geometry.
 
+    Warning
+    -------
+        This is a very simplified source holder, which is not based on any technical drawings. It
+        is only meant to provide the approximate source location.
+
     Parameters
     ----------
     world_lv
