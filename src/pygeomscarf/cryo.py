@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Polygon
 from pyg4ometry import geant4
+from pygeomtools.materials import LegendMaterialRegistry
 
 plt.rcParams["font.size"] = 12
 plt.rcParams["figure.dpi"] = 200
@@ -126,8 +127,8 @@ def gaseous_argon_profile() -> tuple[list, list]:
     height = [
         0,
         0,
-        LAR_FILL_HEIGHT - 2*TOL,  # change in thickness
-        LAR_FILL_HEIGHT - 2*TOL,  # top corner
+        LAR_FILL_HEIGHT - 2 * TOL,  # change in thickness
+        LAR_FILL_HEIGHT - 2 * TOL,  # top corner
     ]
     return radius, height
 
@@ -233,7 +234,7 @@ def plot_profiles(profiles: dict):
 
 
 def build_cryostat(
-    world_log: geant4.LogicalVolume, reg: geant4.Registry, *, plot: bool = False
+    world_log: geant4.LogicalVolume, reg: geant4.Registry, mats: LegendMaterialRegistry, *, plot: bool = False
 ) -> geant4.Registry:
     """Construct the SCARF cryostat and LAr and add this to the
     geometry.
@@ -258,7 +259,7 @@ def build_cryostat(
     r_inner, z_inner = inner_cryostat_profile()
 
     inner = _construct_polycone(
-        "inner_cryostat", r_inner, z_inner, reg, color=[0.7, 0.3, 0.3, 0.1], material="G4_Fe"
+        "inner_cryostat", r_inner, z_inner, reg, color=[0.7, 0.3, 0.3, 0.1], material=mats.metal_steel
     )
 
     _place_polycone("inner_cryostat", inner, world_log, -SHIFT, reg)
@@ -274,7 +275,7 @@ def build_cryostat(
     # now add the lar
     r_lar, z_lar = lar_profile()
 
-    lar = _construct_polycone("lar", r_lar, z_lar, reg, color=[0, 1, 1, 0.5], material="G4_lAr")
+    lar = _construct_polycone("lar", r_lar, z_lar, reg, color=[0, 1, 1, 0.5], material=mats.liquidargon)
     _place_polycone("lar", lar, inner, THICKNESS, reg)
 
     profiles["lar"] = {
@@ -303,7 +304,7 @@ def build_cryostat(
     r_outer, z_outer = outer_cryostat_profile()
 
     outer = _construct_polycone(
-        "outer_cryostat", r_outer, z_outer, reg, color=[0.7, 0.3, 0.3, 0.1], material="G4_Fe"
+        "outer_cryostat", r_outer, z_outer, reg, color=[0.7, 0.3, 0.3, 0.1], material=mats.metal_steel
     )
     _place_polycone("outer_cryostat", outer, world_log, -150 - THICKNESS - SHIFT, reg)
 
@@ -315,10 +316,11 @@ def build_cryostat(
     }
 
     # add the cryostat lid (for now just a cylinder)
-
     lid_r, lid_z = cryostat_lid_profile()
 
-    lid = _construct_polycone("cryostat_lid", lid_r, lid_z, reg, color=[0.7, 0.3, 0.3, 0.1], material="G4_Fe")
+    lid = _construct_polycone(
+        "cryostat_lid", lid_r, lid_z, reg, color=[0.7, 0.3, 0.3, 0.1], material=mats.metal_steel
+    )
     z_lid = LOWER_HEIGHT + UPPER_HEIGHT + 3 - SHIFT
 
     _place_polycone("cryostat_lid", lid, world_log, z_lid, reg)

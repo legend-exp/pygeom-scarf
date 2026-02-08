@@ -7,6 +7,7 @@ import dbetto
 from git import GitCommandError
 from legendmeta import LegendMetadata
 from pyg4ometry import geant4
+from pygeomtools.materials import LegendMaterialRegistry
 
 from pygeomscarf.cryo import build_cryostat
 from pygeomscarf.metadata import PublicMetadataProxy
@@ -54,6 +55,7 @@ def construct(
     config = config if config is not None else {}
 
     reg = geant4.Registry()
+    mats = LegendMaterialRegistry(reg)
 
     # Create the world volume
     world_material = geant4.MaterialPredefined("G4_Galactic")
@@ -62,4 +64,4 @@ def construct(
     reg.setWorld(world_lv)
 
     # build the cryostat
-    return build_cryostat(world_lv, reg, plot=plot_cryostat)
+    return build_cryostat(world_lv, reg, mats, plot=plot_cryostat)

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 import pyg4ometry
+from pygeomtools.materials import LegendMaterialRegistry
 
 from pygeomscarf.cryo import (
     build_cryostat,
@@ -15,11 +16,12 @@ from pygeomscarf.cryo import (
 
 def test_build_cryostat():
     reg = pyg4ometry.geant4.Registry()
+    mats = LegendMaterialRegistry(reg)
     world_s = pyg4ometry.geant4.solid.Tubs("World_s", 0, 3000, 5000, 0, 2 * np.pi, registry=reg, lunit="mm")
     world_l = pyg4ometry.geant4.LogicalVolume(world_s, "G4_Galactic", "World", registry=reg)
     reg.setWorld(world_l)
 
-    reg = build_cryostat(world_l, reg, plot=False)
+    reg = build_cryostat(world_l, reg, mats, plot=False)
 
     assert isinstance(reg, pyg4ometry.geant4.Registry)
 
