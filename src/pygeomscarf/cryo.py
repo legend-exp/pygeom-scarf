@@ -21,6 +21,8 @@ LOWER_HEIGHT = 1501
 UPPER_HEIGHT = 780
 SHIFT = (LOWER_HEIGHT + UPPER_HEIGHT) / 2
 
+TOL = 0.01  # tolerance to avoid overlaps
+
 LAR_FILL_HEIGHT = 680
 
 OUTER_RADIUS = 400
@@ -94,8 +96,8 @@ def lar_profile() -> tuple[list, list]:
         0,  # lower corner
         LOWER_HEIGHT,  # change in thickness
         LOWER_HEIGHT,
-        LOWER_HEIGHT + UPPER_HEIGHT,
-        LOWER_HEIGHT + UPPER_HEIGHT,  # top corner
+        LOWER_HEIGHT + UPPER_HEIGHT - TOL,
+        LOWER_HEIGHT + UPPER_HEIGHT - TOL,  # top corner
     ]
     return radius, height
 
@@ -116,16 +118,16 @@ def gaseous_argon_profile() -> tuple[list, list]:
     """
     radius = [
         0,
-        INNER_RADIUS + (THICKNESS / 2) - UPPER_THICKNESS / 2 - 0.01,  # lower corner
-        INNER_RADIUS + (THICKNESS / 2) - UPPER_THICKNESS / 2 - 0.01,
+        INNER_RADIUS + (THICKNESS / 2) - UPPER_THICKNESS / 2 - TOL,  # lower corner
+        INNER_RADIUS + (THICKNESS / 2) - UPPER_THICKNESS / 2 - TOL,
         0,
     ]
 
     height = [
         0,
         0,
-        LAR_FILL_HEIGHT,  # change in thickness
-        LAR_FILL_HEIGHT,  # top corner
+        LAR_FILL_HEIGHT - 2*TOL,  # change in thickness
+        LAR_FILL_HEIGHT - 2*TOL,  # top corner
     ]
     return radius, height
 
