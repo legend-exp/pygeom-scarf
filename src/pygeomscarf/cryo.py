@@ -237,7 +237,7 @@ def build_cryostat(
     """Construct the SCARF cryostat and LAr and add this to the
     geometry.
 
-    ... warning
+    .. warning::
         The geometry for the lower part of the cryostat and the
         lid is approximate.
 
