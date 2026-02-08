@@ -8,12 +8,16 @@ from git import GitCommandError
 from legendmeta import LegendMetadata
 from pyg4ometry import geant4
 
+from pygeomscarf.cryo import build_cryostat
+from pygeomscarf.metadata import PublicMetadataProxy
+
 log = logging.getLogger(__name__)
 
 
 def construct(
     config: str | dict | None = None,
     public_geometry: bool = False,
+    plot_cryostat: bool = False,
 ) -> geant4.Registry:
     """Construct the SCARF geometry and return the registry containing the world volume.
 
@@ -22,6 +26,8 @@ def construct(
     config
       configuration dictionary (or file containing it) defining relevant
       parameters of the geometry.
+    plot_cryostat
+        if true, the cryostat will be plotted.
     public_geometry
       if true, uses the public geometry metadata instead of the LEGEND-internal
       legend-metadata.
@@ -41,9 +47,9 @@ def construct(
         raise RuntimeError(msg)
 
     if lmeta is None:
-        log.warning("CONSTRUCTING GEOMETRY FROM PUBLIC DATA ONLY")
-        # TODO: use this public metadata proxy
-        # dummy_geom = PublicMetadataProxy()
+        msg = "CONSTRUCTING GEOMETRY FROM PUBLIC DATA ONLY"
+        log.warning(msg)
+        lmeta = PublicMetadataProxy()
 
     config = config if config is not None else {}
 
@@ -55,6 +61,5 @@ def construct(
     world_lv = geant4.LogicalVolume(world, world_material, "world", reg)
     reg.setWorld(world_lv)
 
-    # TODO: add the geometry!
-
-    return reg
+    # build the cryostat
+    return build_cryostat(world_lv, reg, plot=plot_cryostat)

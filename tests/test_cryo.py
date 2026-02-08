@@ -3,7 +3,13 @@ from __future__ import annotations
 import numpy as np
 import pyg4ometry
 
-from pygeomscarf.cryo import build_cryostat
+from pygeomscarf.cryo import (
+    build_cryostat,
+    cryostat_lid_profile,
+    inner_cryostat_profile,
+    lead_profile,
+    outer_cryostat_profile,
+)
 
 
 def test_build_cryostat():
@@ -12,4 +18,14 @@ def test_build_cryostat():
     world_l = pyg4ometry.geant4.LogicalVolume(world_s, "G4_Galactic", "World", registry=reg)
     reg.setWorld(world_l)
 
-    build_cryostat(world_l,reg, plot=True)
+    reg = build_cryostat(world_l, reg, plot=True)
+
+    assert isinstance(reg, pyg4ometry.geant4.Registry)
+
+
+def test_profiles():
+    for prof in [outer_cryostat_profile, cryostat_lid_profile, lead_profile, inner_cryostat_profile]:
+        r, z = prof()
+        assert isinstance(r, list)
+        assert isinstance(z, list)
+        assert len(r) == len(z)
