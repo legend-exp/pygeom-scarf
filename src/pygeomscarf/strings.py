@@ -1,12 +1,50 @@
 from __future__ import annotations
 
 import pyg4ometry.geant4
+import pygeomoptics
 from legendmeta import LegendMetadata
+from pyg4ometry import geant4
 from pygeomhpges import make_hpge
+from pygeomtools.detectors import RemageDetectorInfo
 from pygeomtools.materials import LegendMaterialRegistry
 
 from pygeomscarf.metadata import PublicMetadataProxy
 from pygeomscarf.utils import _place_pv
+
+
+def set_germanium_reflectivity(hpge: geant4.PhysicalVolume, reg: geant4.Registry, lar_name: str = "lar"):
+    """Set the reflectivity of the germanium surfaces.
+
+    Parameters
+    ----------
+    hpge
+        The physical volume of the HPGe detector, to set the reflectivity for.
+    reg
+        The registry to add the reflectivity to.
+    lar_name
+        The name of the liquid argon physical volume, to set the reflectivity with respect to.
+
+    """
+    _to_germanium = geant4.solid.OpticalSurface(
+        "surface_to_germanium",
+        finish="ground",
+        model="unified",
+        surf_type="dielectric_metal",
+        value=0.3,
+        registry=reg,
+    )
+
+    pygeomoptics.germanium.pyg4_germanium_attach_reflectivity(_to_germanium, reg)
+
+    lar_pv = reg.physicalVolumeDict[lar_name]
+    geant4.BorderSurface(
+        "bsurface_lar_ge_" + hpge.name,
+        lar_pv,
+        hpge,
+        _to_germanium,
+        reg,
+    )
+    return reg
 
 
 def build_strings(
@@ -56,7 +94,7 @@ def build_strings(
 
     """
 
-    for hpge in hpges:
+    for uid, hpge in enumerate(hpges):
         name = hpge["name"]
         z_pos = lar_height / 2.0 + hpge["pplus_pos_from_lar_center"]
 
@@ -69,5 +107,11 @@ def build_strings(
         hpge_lv.pygeom_color_rgba = [1, 1, 1, 1]
 
         _place_pv(name, hpge_lv, lar_lv, z_pos, reg)
+
+        pv = reg.physicalVolumeDict[name]
+        pv.pygeom_active_detector = RemageDetectorInfo("germanium", uid, hpge_meta)
+
+        # set reflectivity
+        reg = set_germanium_reflectivity(pv, reg, lar_name="lar")
 
     return reg
