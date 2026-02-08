@@ -122,7 +122,7 @@ def construct(
         reg = build_source(
             world_lv,
             radius=cryostat_meta.outer.radius_in_mm + cryostat_meta.lead.air_gap_in_mm / 2.0,
-            z_pos=config["source"]["pos_from_lar_center"] + lar_height + lar_offset,
+            z_pos=config["source"]["pos_from_lar_center"] + lar_height / 2 + lar_offset,
             reg=reg,
         )
 

@@ -11,8 +11,8 @@ def build_source(
     z_pos: float,
     reg: geant4.Registry,
     *,
-    source_height: float = 10,
-    source_radius: float = 1,
+    source_height: float = 5,
+    source_radius: float = 2,
     material: str = "G4_Fe",
 ) -> geant4.LogicalVolume:
     """Build the source holder and source for the SCARF geometry.
@@ -38,6 +38,8 @@ def build_source(
         "source", 0, source_radius, source_height, 0, 2 * np.pi, registry=reg, lunit="mm", nslice=720
     )
     source_l = pyg4ometry.geant4.LogicalVolume(source_s, material, "source", registry=reg)
+
+    source_l.pygeom_color_rgba = [1, 0, 0, 1]
 
     # place the source into the holder
     pyg4ometry.geant4.PhysicalVolume(
