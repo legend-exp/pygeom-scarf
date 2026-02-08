@@ -25,12 +25,16 @@ def dump_gdml_cli(argv: list[str] | None = None) -> None:
     if isinstance(args.visualize, str):
         vis_scene = utils.load_dict(args.visualize)
 
+    if args.clip_geometry:
+        vis_scene["clipper"] = [{"origin": [0, 0, 0], "normal": [1, 0, 0], "close_cuts": False}]
+
     if vis_scene.get("fine_mesh", False) or args.check_overlaps:
         meshconfig.setGlobalMeshSliceAndStack(100)
 
     registry = core.construct(
         config=config,
         public_geometry=args.public_geom,
+        plot_cryostat=args.plot_cryostat,
     )
 
     if args.print_volumes:
@@ -84,6 +88,19 @@ def _parse_cli_args(argv: list[str] | None = None) -> tuple[argparse.Namespace, 
         nargs="?",
         const=True,
         help="""Open a VTK visualization of the generated geometry (with optional scene file)""",
+    )
+
+    parser.add_argument(
+        "--clip-geometry",
+        action="store_true",
+        help="""Clip the geometry for visualization purposes""",
+    )
+
+    parser.add_argument(
+        "--plot-cryostat",
+        "-p",
+        action="store_true",
+        help="""Plot the cryostat profiles.""",
     )
     parser.add_argument(
         "--check-overlaps",

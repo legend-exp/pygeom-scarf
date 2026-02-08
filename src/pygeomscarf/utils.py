@@ -35,3 +35,11 @@ def _read_model(
     file = resources.files("pygeomscarf") / "models" / file
     solid = pyg4ometry.stl.Reader(file, solidname=name, centre=False, registry=b.registry).getSolid()
     return geant4.LogicalVolume(solid, material, name, b.registry)
+
+
+def _place_pv(
+    name: str, log: geant4.LogicalVolume, mother: geant4.LogicalVolume, z_pos: float, reg: geant4.Registry
+):
+    """Place the polcyone (on-axis) into the registry."""
+
+    geant4.PhysicalVolume([0, 0, 0], [0, 0, z_pos, "mm"], log, name, mother, registry=reg)

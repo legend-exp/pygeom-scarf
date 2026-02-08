@@ -7,6 +7,11 @@ import dbetto
 from git import GitCommandError
 from legendmeta import LegendMetadata
 from pyg4ometry import geant4
+from pygeomtools.materials import LegendMaterialRegistry
+
+from pygeomscarf.cryo import build_cryostat
+from pygeomscarf.metadata import PublicMetadataProxy
+from pygeomscarf.strings import build_strings
 
 log = logging.getLogger(__name__)
 
@@ -14,6 +19,7 @@ log = logging.getLogger(__name__)
 def construct(
     config: str | dict | None = None,
     public_geometry: bool = False,
+    plot_cryostat: bool = False,
 ) -> geant4.Registry:
     """Construct the SCARF geometry and return the registry containing the world volume.
 
@@ -22,6 +28,32 @@ def construct(
     config
       configuration dictionary (or file containing it) defining relevant
       parameters of the geometry.
+
+      This should have the following structure:
+
+        .. code-block:: yaml
+
+            hpges:
+                - name: "V09999A
+                    pplus_pos_from_lar_center: 120
+                - name: "V09999B
+                    pplus_pos_from_lar_center: 230
+
+            source:
+                - pos_from_lar_center: 150
+
+            fiber_shroud:
+                mode: "simplified"  # or "detailed"
+                height_in_mm: 1200
+                radius_in_mm: 200
+                center_pos_from_lar_center: 120
+
+        - If the ``hpges`` key is present, the geometry will include HPGe detectors, which will be placed at the specified positions (in mm) from the bottom of the cryostat.
+        - The ``source`` key can be used to place a source at a specified position from the bottom of the cryostat.
+        - Similarly, the ``fiber_shroud`` key can be used to include a fiber shroud in the geometry, with the specified mode (e.g. "simplified" or "detailed"), height, radius and position from the bottom of the cryostat.
+
+    plot_cryostat
+        if true, the cryostat will be plotted.
     public_geometry
       if true, uses the public geometry metadata instead of the LEGEND-internal
       legend-metadata.
@@ -33,19 +65,24 @@ def construct(
     if not public_geometry:
         with contextlib.suppress(GitCommandError):
             lmeta = LegendMetadata(lazy=True)
+
     # require user action to construct a testdata-only geometry (i.e. to avoid accidental creation of "wrong"
     # geometries by LEGEND members).
     if lmeta is None and not public_geometry:
         msg = "cannot construct geometry from public testdata only, if not explicitly instructed"
         raise RuntimeError(msg)
+
     if lmeta is None:
-        log.warning("CONSTRUCTING GEOMETRY FROM PUBLIC DATA ONLY")
-        # TODO: use this public metadata proxy
-        # dummy_geom = PublicMetadataProxy()
+        msg = "CONSTRUCTING GEOMETRY FROM PUBLIC DATA ONLY"
+        log.warning(msg)
+        lmeta = PublicMetadataProxy()
 
     config = config if config is not None else {}
 
+    hpges = config.get("hpges", {})
+
     reg = geant4.Registry()
+    mats = LegendMaterialRegistry(reg)
 
     # Create the world volume
     world_material = geant4.MaterialPredefined("G4_Galactic")
@@ -53,6 +90,12 @@ def construct(
     world_lv = geant4.LogicalVolume(world, world_material, "world", reg)
     reg.setWorld(world_lv)
 
-    # TODO: add the geometry!
+    # build the cryostat, extract the height of the LAr volume
+    # this is used to align the HPGe strings to the center of the lar
+    reg, lar_height = build_cryostat(world_lv, reg, mats, plot=plot_cryostat)
+    lar_lv = reg.logicalVolumeDict["lar"]
 
-    return reg
+    # place the hpge and fibers
+    return build_strings(
+        lar_lv, hpges, mats, lmeta, reg, lar_height=lar_height, fiber_shroud=config.get("fiber_shroud", {})
+    )
