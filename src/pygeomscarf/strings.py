@@ -40,7 +40,7 @@ def build_strings(
         The metadata to use for constructing the strings.
     reg
         The registry to add the strings to.
-        
+
     fiber_shroud
         A dictionary containing the fiber shroud information, including its mode
         (e.g. "simplified" or "detailed"), height, radius and position from the bottom of the cryostat.
