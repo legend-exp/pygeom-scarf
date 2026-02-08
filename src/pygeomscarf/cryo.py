@@ -32,10 +32,10 @@ LEAD_THICK = 100
 
 
 def inner_cryostat_profile() -> tuple[list, list]:
-    """Profile of the inner cryostat. See {func}`construct_inner_cryostat` for
+    """Profile of the inner cryostat. See :func:`construct_inner_cryostat` for
     more details.
 
-    The geometry is constructed as a {class}`pyg4ometry.geant4.solid.genericPolcyone`, which
+    The geometry is constructed as a :class:`pyg4ometry.geant4.solid.genericPolycone`, which
     is almost cylindrical with a slight tapering to account for the change in thickness.
 
     Warning
