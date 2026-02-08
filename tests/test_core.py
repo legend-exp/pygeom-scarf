@@ -24,3 +24,14 @@ def test_construct():
     )
     assert reg.worldVolume is not None
     assert "V09999A" in reg.logicalVolumeDict
+
+    # now with source
+    reg = construct(
+        config={
+            "hpges": [{"name": "V09999A", "pplus_pos_from_lar_center": 120}],
+            "source": {"pos_from_lar_center": 150},
+        },
+        public_geometry=True,
+    )
+    assert reg.worldVolume is not None
+    assert "source" in reg.logicalVolumeDict
