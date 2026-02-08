@@ -11,6 +11,7 @@ from pygeomtools.materials import LegendMaterialRegistry
 
 from pygeomscarf.cryo import build_cryostat
 from pygeomscarf.metadata import PublicMetadataProxy
+from pygeomscarf.strings import build_strings
 
 log = logging.getLogger(__name__)
 
@@ -27,6 +28,30 @@ def construct(
     config
       configuration dictionary (or file containing it) defining relevant
       parameters of the geometry.
+
+      This should have the following structure:
+
+        .. code-block:: yaml
+
+            hpges:
+                - name: "V09999A
+                    pplus_pos_from_cryostat_bottom_in_mm: 120
+                - name: "V09999B
+                    pplus_pos_from_cryostat_bottom_in_mm: 230
+
+            source:
+                - center_pos_from_cryostat_bottom_in_mm: 150
+
+            fiber_shroud:
+                mode: "simplified"  # or "detailed"
+                height_in_mm: 1200
+                radius_in_mm: 200
+                center_pos_from_cryostat_bottom_in_mm: 120
+
+        - If the ``hpges`` key is present, the geometry will include HPGe detectors, which will be placed at the specified positions (in mm) from the bottom of the cryostat.
+        - The ``source`` key can be used to place a source at a specified position from the bottom of the cryostat.
+        - Similarly, the ``fiber_shroud`` key can be used to include a fiber shroud in the geometry, with the specified mode (e.g. "simplified" or "detailed"), height, radius and position from the bottom of the cryostat.
+
     plot_cryostat
         if true, the cryostat will be plotted.
     public_geometry
@@ -54,6 +79,8 @@ def construct(
 
     config = config if config is not None else {}
 
+    hpges = config.get("hpges", {})
+
     reg = geant4.Registry()
     mats = LegendMaterialRegistry(reg)
 
@@ -64,4 +91,8 @@ def construct(
     reg.setWorld(world_lv)
 
     # build the cryostat
-    return build_cryostat(world_lv, reg, mats, plot=plot_cryostat)
+    reg = build_cryostat(world_lv, reg, mats, plot=plot_cryostat)
+    lar_lv = reg.logicalVolumeDict["lar"]
+
+    # place the hpge and fibers
+    return build_strings(lar_lv, hpges, mats, lmeta, reg, fiber_shroud=config.get("fiber_shroud", {}))

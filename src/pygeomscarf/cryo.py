@@ -8,6 +8,8 @@ from matplotlib.patches import Polygon
 from pyg4ometry import geant4
 from pygeomtools.materials import LegendMaterialRegistry
 
+from pygeomscarf.utils import _place_pv
+
 plt.rcParams["font.size"] = 12
 plt.rcParams["figure.dpi"] = 200
 
@@ -197,14 +199,6 @@ def _construct_polycone(
     return log
 
 
-def _place_polycone(
-    name: str, log: geant4.LogicalVolume, mother: geant4.LogicalVolume, z_pos: float, reg: geant4.Registry
-):
-    """Place the polcyone (on-axis) into the registry."""
-
-    geant4.PhysicalVolume([0, 0, 0], [0, 0, z_pos, "mm"], log, name, mother, registry=reg)
-
-
 def plot_profiles(profiles: dict):
     """Plot the profiles of the cryostat volumes.
 
@@ -262,7 +256,7 @@ def build_cryostat(
         "inner_cryostat", r_inner, z_inner, reg, color=[0.7, 0.3, 0.3, 0.1], material=mats.metal_steel
     )
 
-    _place_polycone("inner_cryostat", inner, world_log, -SHIFT, reg)
+    _place_pv("inner_cryostat", inner, world_log, z_pos=-SHIFT, reg=reg)
 
     # save the profile
     profiles["inner_cryostat"] = {
@@ -276,7 +270,7 @@ def build_cryostat(
     r_lar, z_lar = lar_profile()
 
     lar = _construct_polycone("lar", r_lar, z_lar, reg, color=[0, 1, 1, 0.5], material=mats.liquidargon)
-    _place_polycone("lar", lar, inner, THICKNESS, reg)
+    _place_pv("lar", lar, inner, z_pos=THICKNESS, reg=reg)
 
     profiles["lar"] = {
         "radius": r_lar,
@@ -291,7 +285,7 @@ def build_cryostat(
     gas = _construct_polycone(
         "gaseous_argon", r_gas, z_gas, reg, color=[0.8784, 1.0, 1.0, 1.0], material="G4_Ar"
     )
-    _place_polycone("gaseous_argon", gas, lar, LOWER_HEIGHT + UPPER_HEIGHT - LAR_FILL_HEIGHT, reg)
+    _place_pv("gaseous_argon", gas, lar, z_pos=LOWER_HEIGHT + UPPER_HEIGHT - LAR_FILL_HEIGHT, reg=reg)
 
     profiles["gaseous_argon"] = {
         "radius": r_gas,
@@ -306,7 +300,7 @@ def build_cryostat(
     outer = _construct_polycone(
         "outer_cryostat", r_outer, z_outer, reg, color=[0.7, 0.3, 0.3, 0.1], material=mats.metal_steel
     )
-    _place_polycone("outer_cryostat", outer, world_log, -150 - THICKNESS - SHIFT, reg)
+    _place_pv("outer_cryostat", outer, world_log, z_pos=-150 - THICKNESS - SHIFT, reg=reg)
 
     profiles["outer_cryostat"] = {
         "radius": r_outer,
@@ -323,7 +317,7 @@ def build_cryostat(
     )
     z_lid = LOWER_HEIGHT + UPPER_HEIGHT + 3 - SHIFT
 
-    _place_polycone("cryostat_lid", lid, world_log, z_lid, reg)
+    _place_pv("cryostat_lid", lid, world_log, z_pos=z_lid, reg=reg)
 
     profiles["cryostat_lid"] = {
         "radius": lid_r,
@@ -338,7 +332,7 @@ def build_cryostat(
     lead = _construct_polycone(
         "lead_shield", r_lead, z_lead, reg, color=[0.9, 0.9, 0.9, 0.1], material="G4_Pb"
     )
-    _place_polycone("lead_shield", lead, world_log, -150 - THICKNESS - AIR_GAP - 2 - SHIFT, reg)
+    _place_pv("lead_shield", lead, world_log, z_pos=-150 - THICKNESS - AIR_GAP - 2 - SHIFT, reg=reg)
 
     profiles["lead_shield"] = {
         "radius": r_lead,
