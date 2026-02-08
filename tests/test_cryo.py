@@ -18,7 +18,7 @@ def test_build_cryostat():
     world_l = pyg4ometry.geant4.LogicalVolume(world_s, "G4_Galactic", "World", registry=reg)
     reg.setWorld(world_l)
 
-    reg = build_cryostat(world_l, reg, plot=True)
+    reg = build_cryostat(world_l, reg, plot=False)
 
     assert isinstance(reg, pyg4ometry.geant4.Registry)
 
