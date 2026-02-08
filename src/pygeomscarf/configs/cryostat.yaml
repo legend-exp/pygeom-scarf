@@ -1,0 +1,20 @@
+inner:
+  radius_in_mm: 348.0
+  upper:
+    thickness_in_mm: 0.5
+    height_in_mm: 780
+  lower:
+    thickness_in_mm: 2
+    height_in_mm: 1501
+outer:
+  radius_in_mm: 400
+  height_in_mm: 2433
+  thickness_in_mm: 2
+top:
+  height_in_mm: 10
+  radius_in_mm: 430
+gas_argon:
+  height_in_mm: 680
+lead:
+  air_gap_in_mm: 5
+  thickness_in_mm: 100

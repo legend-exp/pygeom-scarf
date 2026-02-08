@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import contextlib
 import logging
+from importlib import resources
 
 import dbetto
 from git import GitCommandError
@@ -11,6 +12,7 @@ from pygeomtools.materials import LegendMaterialRegistry
 
 from pygeomscarf.cryo import build_cryostat
 from pygeomscarf.metadata import PublicMetadataProxy
+from pygeomscarf.source import build_source
 from pygeomscarf.strings import build_strings
 
 log = logging.getLogger(__name__)
@@ -40,7 +42,7 @@ def construct(
                     pplus_pos_from_lar_center: 230
 
             source:
-                - pos_from_lar_center: 150
+                pos_from_lar_center: 150
 
             fiber_shroud:
                 mode: "simplified"  # or "detailed"
@@ -79,6 +81,11 @@ def construct(
 
     config = config if config is not None else {}
 
+    # extract the dimensions of the cryostat
+    cryostat_meta = dbetto.AttrsDict(
+        dbetto.utils.load_dict(resources.files("pygeomscarf") / "configs" / "cryostat.yaml")
+    )
+
     hpges = config.get("hpges", {})
 
     reg = geant4.Registry()
@@ -92,10 +99,31 @@ def construct(
 
     # build the cryostat, extract the height of the LAr volume
     # this is used to align the HPGe strings to the center of the lar
-    reg, lar_height = build_cryostat(world_lv, reg, mats, plot=plot_cryostat)
+    reg = build_cryostat(cryostat_meta, world_lv, reg, mats, plot=plot_cryostat)
     lar_lv = reg.logicalVolumeDict["lar"]
 
+    # the height of the LAr
+    lar_height = (
+        cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm
+    ) - cryostat_meta.gas_argon.height_in_mm
+
+    # the offset between the lar volume and the world
+    lar_offset = (
+        cryostat_meta.inner.lower.thickness_in_mm
+        - (cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm) / 2.0
+    )
     # place the hpge and fibers
-    return build_strings(
+    reg = build_strings(
         lar_lv, hpges, mats, lmeta, reg, lar_height=lar_height, fiber_shroud=config.get("fiber_shroud", {})
     )
+
+    # source
+    if "source" in config:
+        reg = build_source(
+            world_lv,
+            radius=cryostat_meta.outer.radius_in_mm + cryostat_meta.lead.air_gap_in_mm / 2.0,
+            z_pos=config["source"]["pos_from_lar_center"] + lar_height + lar_offset,
+            reg=reg,
+        )
+
+    return reg
