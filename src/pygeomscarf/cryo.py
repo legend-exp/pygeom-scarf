@@ -346,4 +346,4 @@ def build_cryostat(
         plot_profiles(profiles)
         plt.show()
 
-    return reg
+    return reg, LOWER_HEIGHT + UPPER_HEIGHT - LAR_FILL_HEIGHT

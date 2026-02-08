@@ -1,16 +1,18 @@
 from __future__ import annotations
 
 import copy
-from importlib import resources
 
 from dbetto import AttrsDict, TextDB
+from legendtestdata import LegendTestData
 
 
 class PublicMetadataProxy:
     """Provides proxies to transparently replace legend hardware metadata with sample data."""
 
     def __init__(self):
-        dummy = TextDB(resources.files("pygeomscarf") / "configs" / "dummy_geom")
+        ldata = LegendTestData()
+
+        dummy = TextDB(ldata.get_path("legend/metadata/hardware/detectors/germanium/diodes"))
 
         self.hardware = AttrsDict({"detectors": {"germanium": {"diodes": _DiodeProxy(dummy)}}})
 

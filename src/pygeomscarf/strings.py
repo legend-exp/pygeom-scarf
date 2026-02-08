@@ -15,6 +15,7 @@ def build_strings(
     mats: LegendMaterialRegistry,
     meta: LegendMetadata | PublicMetadataProxy,
     reg: pyg4ometry.geant4.Registry,
+    lar_height: float,
     fiber_shroud: dict | None = None,
 ) -> pyg4ometry.geant4.Registry:
     """Build the strings and place them into the registry.
@@ -57,7 +58,7 @@ def build_strings(
 
     for hpge in hpges:
         name = hpge["name"]
-        z_pos = hpge["position_from_cryostat_bottom_in_mm"]
+        z_pos = lar_height / 2.0 + hpge["pplus_pos_from_lar_center"]
 
         hpge_meta = meta.hardware.detectors.germanium.diodes[name]
 
@@ -65,6 +66,7 @@ def build_strings(
             hpge_meta["production"]["enrichment"]["val"] = 0.9
 
         hpge_lv = make_hpge(hpge_meta, reg)
+        hpge_lv.pygeom_color_rgba = [1, 1, 1, 1]
 
         _place_pv(name, hpge_lv, lar_lv, z_pos, reg)
 

@@ -12,5 +12,15 @@ def test_import():
 
 
 def test_construct():
+    # just cryostat
     reg = construct(public_geometry=public_geom)
     assert reg.worldVolume is not None
+
+    # with hpge
+
+    reg = construct(
+        config={"hpges": [{"name": "V09999A", "pplus_pos_from_lar_center": 120}]},
+        public_geometry=public_geom,
+    )
+    assert reg.worldVolume is not None
+    assert "V09999A" in reg.logicalVolumeDict

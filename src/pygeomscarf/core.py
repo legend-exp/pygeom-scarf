@@ -35,18 +35,18 @@ def construct(
 
             hpges:
                 - name: "V09999A
-                    pplus_pos_from_cryostat_bottom_in_mm: 120
+                    pplus_pos_from_lar_center: 120
                 - name: "V09999B
-                    pplus_pos_from_cryostat_bottom_in_mm: 230
+                    pplus_pos_from_lar_center: 230
 
             source:
-                - center_pos_from_cryostat_bottom_in_mm: 150
+                - pos_from_lar_center: 150
 
             fiber_shroud:
                 mode: "simplified"  # or "detailed"
                 height_in_mm: 1200
                 radius_in_mm: 200
-                center_pos_from_cryostat_bottom_in_mm: 120
+                center_pos_from_lar_center: 120
 
         - If the ``hpges`` key is present, the geometry will include HPGe detectors, which will be placed at the specified positions (in mm) from the bottom of the cryostat.
         - The ``source`` key can be used to place a source at a specified position from the bottom of the cryostat.
@@ -90,9 +90,12 @@ def construct(
     world_lv = geant4.LogicalVolume(world, world_material, "world", reg)
     reg.setWorld(world_lv)
 
-    # build the cryostat
-    reg = build_cryostat(world_lv, reg, mats, plot=plot_cryostat)
+    # build the cryostat, extract the height of the LAr volume
+    # this is used to align the HPGe strings to the center of the lar
+    reg, lar_height = build_cryostat(world_lv, reg, mats, plot=plot_cryostat)
     lar_lv = reg.logicalVolumeDict["lar"]
 
     # place the hpge and fibers
-    return build_strings(lar_lv, hpges, mats, lmeta, reg, fiber_shroud=config.get("fiber_shroud", {}))
+    return build_strings(
+        lar_lv, hpges, mats, lmeta, reg, lar_height=lar_height, fiber_shroud=config.get("fiber_shroud", {})
+    )

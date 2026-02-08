@@ -21,9 +21,11 @@ def test_build_cryostat():
     world_l = pyg4ometry.geant4.LogicalVolume(world_s, "G4_Galactic", "World", registry=reg)
     reg.setWorld(world_l)
 
-    reg = build_cryostat(world_l, reg, mats, plot=False)
+    reg, lar_height = build_cryostat(world_l, reg, mats, plot=False)
 
     assert isinstance(reg, pyg4ometry.geant4.Registry)
+
+    assert lar_height > 0
 
 
 def test_profiles():
