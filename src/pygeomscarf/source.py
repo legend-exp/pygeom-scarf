@@ -12,7 +12,7 @@ def build_source(
     reg: geant4.Registry,
     *,
     source_height: float = 5,
-    source_radius: float = 2,
+    source_radius: float = 1,
     material: str = "G4_Fe",
 ) -> geant4.LogicalVolume:
     """Build the source holder and source for the SCARF geometry.
