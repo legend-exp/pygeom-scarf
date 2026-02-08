@@ -228,7 +228,6 @@ def plot_profiles(profiles: dict):
     ax.set_ylabel("Height [mm]")
     ax.set_title("Profile used for cryostat construction")
     plt.tight_layout()
-    plt.show()
 
 
 def build_cryostat(
@@ -347,5 +346,6 @@ def build_cryostat(
     # now plot if requested
     if plot:
         plot_profiles(profiles)
-
+        plt.show()
+        
     return reg

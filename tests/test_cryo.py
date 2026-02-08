@@ -9,6 +9,7 @@ from pygeomscarf.cryo import (
     inner_cryostat_profile,
     lead_profile,
     outer_cryostat_profile,
+    plot_profiles
 )
 
 
@@ -29,3 +30,8 @@ def test_profiles():
         assert isinstance(r, list)
         assert isinstance(z, list)
         assert len(r) == len(z)
+
+
+def test_plot():
+    assert plot_profiles({"cryostat":{"radius": [0, 100, 200], "height": [0, 100, 200],"shift":0,"kwargs":{}}}) is None
+
