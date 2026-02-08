@@ -356,7 +356,7 @@ def build_cryostat(
     r_inner, z_inner = inner_cryostat_profile(cryostat_meta)
 
     inner = _construct_polycone(
-        "inner_cryostat", r_inner, z_inner, reg, color=[0.7, 0.3, 0.3, 0.1], material=mats.metal_steel
+        "inner_cryostat", r_inner, z_inner, reg, color=[0.3, 0.3, 0.3, 0.0], material=mats.metal_steel
     )
     shift = (cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm) / 2.0
 
@@ -373,7 +373,7 @@ def build_cryostat(
     # now add the lar
     r_lar, z_lar = lar_profile(cryostat_meta)
 
-    lar = _construct_polycone("lar", r_lar, z_lar, reg, color=[0, 1, 1, 0.5], material=mats.liquidargon)
+    lar = _construct_polycone("lar", r_lar, z_lar, reg, color=[0, 1, 1, 0.2], material=mats.liquidargon)
     _place_pv("lar", lar, inner, z_pos=cryostat_meta.inner.lower.thickness_in_mm, reg=reg)
 
     profiles["lar"] = {
@@ -386,11 +386,8 @@ def build_cryostat(
     reg = set_steel_reflectivity(reg, "lar", "inner_cryostat")
 
     # place gaseous argon as a daughter of the inner cryostat, to fill the gap between the LAr and the inner cryostat
-
     r_gas, z_gas = gaseous_argon_profile(cryostat_meta)
-    gas = _construct_polycone(
-        "gaseous_argon", r_gas, z_gas, reg, color=[0.8784, 1.0, 1.0, 1.0], material="G4_Ar"
-    )
+    gas = _construct_polycone("gaseous_argon", r_gas, z_gas, reg, color=[1, 1.0, 1.0, 1], material="G4_Ar")
     _place_pv(
         "gaseous_argon",
         gas,
@@ -415,7 +412,7 @@ def build_cryostat(
     r_outer, z_outer = outer_cryostat_profile(cryostat_meta)
 
     outer = _construct_polycone(
-        "outer_cryostat", r_outer, z_outer, reg, color=[0.7, 0.3, 0.3, 0.1], material=mats.metal_steel
+        "outer_cryostat", r_outer, z_outer, reg, color=[0.3, 0.3, 0.3, 0.05], material=mats.metal_steel
     )
     _place_pv(
         "outer_cryostat",
@@ -436,7 +433,7 @@ def build_cryostat(
     lid_r, lid_z = cryostat_lid_profile(cryostat_meta)
 
     lid = _construct_polycone(
-        "cryostat_lid", lid_r, lid_z, reg, color=[0.7, 0.3, 0.3, 0.1], material=mats.metal_steel
+        "cryostat_lid", lid_r, lid_z, reg, color=[0.3, 0.3, 0.3, 0.05], material=mats.metal_steel
     )
     z_lid = cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm + 3 - shift
 
@@ -453,7 +450,7 @@ def build_cryostat(
     r_lead, z_lead = lead_profile(cryostat_meta)
 
     lead = _construct_polycone(
-        "lead_shield", r_lead, z_lead, reg, color=[0.9, 0.9, 0.9, 0.1], material="G4_Pb"
+        "lead_shield", r_lead, z_lead, reg, color=[0.9, 0.9, 0.9, 0.05], material="G4_Pb"
     )
     _place_pv(
         "lead_shield",

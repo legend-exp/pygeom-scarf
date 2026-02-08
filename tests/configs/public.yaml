@@ -4,3 +4,6 @@ hpges:
 
 source:
   pos_from_lar_center: 00
+
+fiber_shroud:
+  center_pos_from_lar_center: 0

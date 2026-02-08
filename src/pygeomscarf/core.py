@@ -114,7 +114,7 @@ def construct(
     )
     # place the hpge and fibers
     reg = build_strings(
-        lar_lv, hpges, mats, lmeta, reg, lar_height=lar_height, fiber_shroud=config.get("fiber_shroud", {})
+        lar_lv, hpges, mats, lmeta, reg, lar_height=lar_height, fiber_shroud=config.get("fiber_shroud", None)
     )
 
     # source
