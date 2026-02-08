@@ -1,9 +1,44 @@
+"""Construction of the SCARF cryostat and LAr.
+
+The geometry is based on the CAD model of the SCARF cryostat, but is simplified to be a generic polycone.
+
+- The inner cryostat is almost cylindrical, with a slight tapering to account for the change in thickness.
+- The LAr volume fills the inner cryostat, and there is a gap between the LAr and the inner cryostat that is filled with gaseous argon.
+- The outer cryostat is also a simple cylinder, and there is a lead shield surrounding the entire cryostat.
+
+The relevant dimensions are defined in the configuration file, which should have the following format:
+
+.. code-block:: yaml
+
+    inner:
+        radius_in_mm: ...
+        upper:
+            thickness_in_mm: ...
+            height_in_mm: ...
+        lower:
+            thickness_in_mm: ...
+            height_in_mm: ...
+    outer:
+        radius_in_mm: ...
+        height_in_mm: ...
+        thickness_in_mm: ...
+    top:
+        height_in_mm: ...
+        radius_in_mm: ...
+    gas_argon:
+        height_in_mm: ...
+    lead:
+        air_gap_in_mm: ...
+        thickness_in_mm: ...
+"""
+
 from __future__ import annotations
 
 import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
+from dbetto import AttrsDict
 from matplotlib.patches import Polygon
 from pyg4ometry import geant4
 from pygeomtools.materials import LegendMaterialRegistry
@@ -15,33 +50,20 @@ plt.rcParams["figure.dpi"] = 200
 
 log = logging.getLogger(__name__)
 
-# dimensions taken from SCARF technical drawings
-
-INNER_RADIUS = 696 / 2.0
-THICKNESS = 2
-UPPER_THICKNESS = 0.5
-LOWER_HEIGHT = 1501
-UPPER_HEIGHT = 780
-SHIFT = (LOWER_HEIGHT + UPPER_HEIGHT) / 2
-
-TOL = 0.01  # tolerance to avoid overlaps
-
-LAR_FILL_HEIGHT = 680
-
-OUTER_RADIUS = 400
-TOTAL_HEIGHT = 150 + THICKNESS + LOWER_HEIGHT + UPPER_HEIGHT
-
-# lead shield dimensions
-AIR_GAP = 5
-LEAD_THICK = 100
+TOL = 0.01  # mm, tolerance to avoid overlaps
 
 
-def inner_cryostat_profile() -> tuple[list, list]:
+def inner_cryostat_profile(cryostat_meta: AttrsDict) -> tuple[list, list]:
     """Profile of the inner cryostat. See :func:`construct_inner_cryostat` for
     more details.
 
     The geometry is constructed as a :class:`pyg4ometry.geant4.solid.genericPolycone`, which
     is almost cylindrical with a slight tapering to account for the change in thickness.
+
+    Parameters
+    ----------
+    cryostat_meta
+        The metadata containing the relevant dimensions of the cryostat, see :mod:`pygeomscarf.cryo` for more details.
 
     Warning
     -------
@@ -51,136 +73,172 @@ def inner_cryostat_profile() -> tuple[list, list]:
     -------
         list of radii, list of heights
     """
+
+    inner = cryostat_meta.inner
+
     radius = [
         0,
-        INNER_RADIUS + THICKNESS,  # lower corner
-        INNER_RADIUS + THICKNESS,  # change in thickness
-        INNER_RADIUS + (THICKNESS / 2) + UPPER_THICKNESS / 2,
-        INNER_RADIUS + (THICKNESS / 2) + UPPER_THICKNESS / 2,  # top,
+        inner.radius_in_mm + inner.lower.thickness_in_mm,  # lower corner
+        inner.radius_in_mm + inner.lower.thickness_in_mm,  # change in thickness
+        inner.radius_in_mm + (inner.lower.thickness_in_mm / 2.0) + (inner.upper.thickness_in_mm / 2.0),
+        inner.radius_in_mm + (inner.lower.thickness_in_mm / 2) + (inner.upper.thickness_in_mm / 2),
         0,
     ]
 
     height = [
         0,
         0,  # lower corner
-        LOWER_HEIGHT + THICKNESS,  # change in thickness
-        LOWER_HEIGHT + THICKNESS,
-        LOWER_HEIGHT + UPPER_HEIGHT + THICKNESS,
-        LOWER_HEIGHT + UPPER_HEIGHT + THICKNESS,  # top corner
+        inner.lower.height_in_mm + inner.lower.thickness_in_mm,  # change in thickness
+        inner.lower.height_in_mm + inner.lower.thickness_in_mm,
+        inner.lower.height_in_mm + inner.upper.height_in_mm + inner.lower.thickness_in_mm,
+        inner.lower.height_in_mm + inner.upper.height_in_mm + inner.lower.thickness_in_mm,  # top corner
     ]
     return radius, height
 
 
-def lar_profile() -> tuple[list, list]:
+def lar_profile(cryostat_meta: AttrsDict) -> tuple[list, list]:
     """Extract the profile of the lar volume.
 
     The geometry is similar to :func:`extract_inner_cryostat_profile`
     but slightly shifted to account for the cryostat thickness.
 
-    Warning
-    -------
-    For now the LAr fills the entire cryostat.
+    Parameters
+    ----------
+    cryostat_meta
+        The metadata containing the relevant dimensions of the cryostat, see :mod:`pygeomscarf.cryo` for more details.
 
     Returns
     -------
         list of radii, list of heights
     """
+    inner = cryostat_meta.inner
+
     radius = [
         0,
-        INNER_RADIUS,  # lower corner
-        INNER_RADIUS,  # change in thickness
-        INNER_RADIUS + (THICKNESS / 2) - UPPER_THICKNESS / 2,
-        INNER_RADIUS + (THICKNESS / 2) - UPPER_THICKNESS / 2,  # top,
+        inner.radius_in_mm,  # lower corner
+        inner.radius_in_mm,  # change in thickness
+        inner.radius_in_mm + (inner.lower.thickness_in_mm / 2) - inner.upper.thickness_in_mm / 2,
+        inner.radius_in_mm + (inner.lower.thickness_in_mm / 2) - inner.upper.thickness_in_mm / 2,  # top,
         0,
     ]
 
     height = [
         0,
         0,  # lower corner
-        LOWER_HEIGHT,  # change in thickness
-        LOWER_HEIGHT,
-        LOWER_HEIGHT + UPPER_HEIGHT - TOL,
-        LOWER_HEIGHT + UPPER_HEIGHT - TOL,  # top corner
+        inner.lower.height_in_mm,  # change in thickness
+        inner.lower.height_in_mm,
+        inner.lower.height_in_mm + inner.upper.height_in_mm - TOL,
+        inner.lower.height_in_mm + inner.upper.height_in_mm - TOL,  # top corner
     ]
     return radius, height
 
 
-def gaseous_argon_profile() -> tuple[list, list]:
+def gaseous_argon_profile(cryostat_meta: AttrsDict) -> tuple[list, list]:
     """Extract the profile of the gaseous argon volume.
 
     The geometry is similar to :func:`extract_inner_cryostat_profile`
     but slightly shifted to account for the cryostat thickness and the LAr volume.
 
-    Warning
-    -------
-    For now the gaseous argon fills the gap between the LAr and the inner cryostat.
+    Parameters
+    ----------
+    cryostat_meta
+        The metadata containing the relevant dimensions of the cryostat, see :mod:`pygeomscarf.cryo` for more details.
 
     Returns
     -------
         list of radii, list of heights
     """
+    inner = cryostat_meta.inner
     radius = [
         0,
-        INNER_RADIUS + (THICKNESS / 2) - UPPER_THICKNESS / 2 - TOL,  # lower corner
-        INNER_RADIUS + (THICKNESS / 2) - UPPER_THICKNESS / 2 - TOL,
+        inner.radius_in_mm + (inner.lower.thickness_in_mm / 2) - inner.upper.thickness_in_mm / 2 - TOL,
+        inner.radius_in_mm + (inner.lower.thickness_in_mm / 2) - inner.upper.thickness_in_mm / 2 - TOL,
         0,
     ]
 
     height = [
         0,
         0,
-        LAR_FILL_HEIGHT - 2 * TOL,  # change in thickness
-        LAR_FILL_HEIGHT - 2 * TOL,  # top corner
+        cryostat_meta.gas_argon.height_in_mm - 2 * TOL,
+        cryostat_meta.gas_argon.height_in_mm - 2 * TOL,
     ]
     return radius, height
 
 
-def outer_cryostat_profile() -> tuple[list, list]:
+def outer_cryostat_profile(cryostat_meta: AttrsDict) -> tuple[list, list]:
     """Extract the profile of the outer cryostat.
 
     Defines the profile of the outer cryostat vessel.
+
+    Parameters
+    ----------
+    cryostat_meta
+        The metadata containing the relevant dimensions of the cryostat, see :mod:`pygeomscarf.cryo` for more details.
     """
+
+    outer = cryostat_meta.outer
 
     radius = [
         0,
-        OUTER_RADIUS + THICKNESS,  # lower corner
-        OUTER_RADIUS + THICKNESS,  # change in thickness
-        OUTER_RADIUS,
-        OUTER_RADIUS,
+        outer.radius_in_mm + outer.thickness_in_mm,
+        outer.radius_in_mm + outer.thickness_in_mm,
+        outer.radius_in_mm,
+        outer.radius_in_mm,
         0,
     ]
 
-    height = [0, 0, TOTAL_HEIGHT, TOTAL_HEIGHT, THICKNESS, THICKNESS]
+    height = [0, 0, outer.height_in_mm, outer.height_in_mm, outer.thickness_in_mm, outer.thickness_in_mm]
     return radius, height
 
 
-def cryostat_lid_profile() -> tuple[list, list]:
+def cryostat_lid_profile(cryostat_meta: AttrsDict) -> tuple[list, list]:
     """Extract the profile of the cryostat lid.
 
     The lid is a simple cylinder, so the profile is just two points.
-    """
 
-    radius = [0, OUTER_RADIUS + 30, OUTER_RADIUS + 30, 0]
-    height = [0, 0, 10, 10]
+    Parameters
+    ----------
+    cryostat_meta
+        The metadata containing the relevant dimensions of the cryostat, see :mod:`pygeomscarf.cryo` for more details.
+
+    """
+    lid = cryostat_meta.top
+    radius = [0, lid.radius_in_mm, lid.radius_in_mm, 0]
+    height = [0, 0, lid.height_in_mm, lid.height_in_mm]
     return radius, height
 
 
-def lead_profile() -> tuple[list, list]:
+def lead_profile(cryostat_meta: AttrsDict) -> tuple[list, list]:
     """Extract the profile of the lead shield.
 
     The lead shield is a simple cylinder, so the profile is just two points.
+
+    Parameters
+    ----------
+    cryostat_meta
+        The metadata containing the relevant dimensions of the cryostat, see :mod:`pygeomscarf.cryo` for more details.
+
     """
+    outer = cryostat_meta.outer
+    lead = cryostat_meta.lead
 
     radius = [
         0,
-        OUTER_RADIUS + AIR_GAP,  # lower corner
-        OUTER_RADIUS + AIR_GAP,  # lower corner
-        OUTER_RADIUS + AIR_GAP + LEAD_THICK,  # lower corner
-        OUTER_RADIUS + AIR_GAP + LEAD_THICK,  # lower corner
+        outer.radius_in_mm + lead.air_gap_in_mm,  # lower corner
+        outer.radius_in_mm + lead.air_gap_in_mm,  # lower corner
+        outer.radius_in_mm + lead.air_gap_in_mm + lead.thickness_in_mm,  # lower corner
+        outer.radius_in_mm + lead.air_gap_in_mm + lead.thickness_in_mm,  # lower corner
         0,
     ]
 
-    height = [0, 0, TOTAL_HEIGHT + AIR_GAP, TOTAL_HEIGHT + AIR_GAP, -LEAD_THICK, -LEAD_THICK]
+    height = [
+        0,
+        0,
+        outer.height_in_mm + lead.air_gap_in_mm,
+        outer.height_in_mm + lead.air_gap_in_mm,
+        -lead.thickness_in_mm,
+        -lead.thickness_in_mm,
+    ]
     return radius, height
 
 
@@ -228,8 +286,13 @@ def plot_profiles(profiles: dict):
 
 
 def build_cryostat(
-    world_log: geant4.LogicalVolume, reg: geant4.Registry, mats: LegendMaterialRegistry, *, plot: bool = False
-) -> geant4.Registry:
+    cryostat_meta: AttrsDict,
+    world_log: geant4.LogicalVolume,
+    reg: geant4.Registry,
+    mats: LegendMaterialRegistry,
+    *,
+    plot: bool = False,
+) -> tuple[geant4.Registry, float, float]:
     """Construct the SCARF cryostat and LAr and add this to the
     geometry.
 
@@ -239,6 +302,8 @@ def build_cryostat(
 
     Parameters
     ----------
+    cryostat_meta
+        The metadata containing the relevant dimensions of the cryostat, see :mod:`pygeomscarf.cryo` for more details.
     world_log
         The logical volume of the world.
     reg
@@ -250,72 +315,90 @@ def build_cryostat(
     profiles = {}
 
     # inner cryostat
-    r_inner, z_inner = inner_cryostat_profile()
+    r_inner, z_inner = inner_cryostat_profile(cryostat_meta)
 
     inner = _construct_polycone(
         "inner_cryostat", r_inner, z_inner, reg, color=[0.7, 0.3, 0.3, 0.1], material=mats.metal_steel
     )
+    shift = (cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm) / 2.0
 
-    _place_pv("inner_cryostat", inner, world_log, z_pos=-SHIFT, reg=reg)
+    _place_pv("inner_cryostat", inner, world_log, z_pos=-shift, reg=reg)
 
     # save the profile
     profiles["inner_cryostat"] = {
         "radius": r_inner,
         "height": z_inner,
-        "shift": -SHIFT,
+        "shift": -shift,
         "kwargs": {"facecolor": "black", "alpha": 1, "edgecolor": "k"},
     }
 
     # now add the lar
-    r_lar, z_lar = lar_profile()
+    r_lar, z_lar = lar_profile(cryostat_meta)
 
     lar = _construct_polycone("lar", r_lar, z_lar, reg, color=[0, 1, 1, 0.5], material=mats.liquidargon)
-    _place_pv("lar", lar, inner, z_pos=THICKNESS, reg=reg)
+    _place_pv("lar", lar, inner, z_pos=cryostat_meta.inner.lower.thickness_in_mm, reg=reg)
 
     profiles["lar"] = {
         "radius": r_lar,
         "height": z_lar,
-        "shift": -SHIFT + THICKNESS,
+        "shift": -shift + cryostat_meta.inner.lower.thickness_in_mm,
         "kwargs": {"facecolor": "cyan", "alpha": 1},
     }
 
     # place gaseous argon as a daughter of the inner cryostat, to fill the gap between the LAr and the inner cryostat
 
-    r_gas, z_gas = gaseous_argon_profile()
+    r_gas, z_gas = gaseous_argon_profile(cryostat_meta)
     gas = _construct_polycone(
         "gaseous_argon", r_gas, z_gas, reg, color=[0.8784, 1.0, 1.0, 1.0], material="G4_Ar"
     )
-    _place_pv("gaseous_argon", gas, lar, z_pos=LOWER_HEIGHT + UPPER_HEIGHT - LAR_FILL_HEIGHT, reg=reg)
+    _place_pv(
+        "gaseous_argon",
+        gas,
+        lar,
+        z_pos=cryostat_meta.inner.lower.height_in_mm
+        + cryostat_meta.inner.upper.height_in_mm
+        - cryostat_meta.gas_argon.height_in_mm,
+        reg=reg,
+    )
 
     profiles["gaseous_argon"] = {
         "radius": r_gas,
         "height": z_gas,
-        "shift": -SHIFT + LOWER_HEIGHT + UPPER_HEIGHT - LAR_FILL_HEIGHT + THICKNESS,
+        "shift": -shift
+        + cryostat_meta.inner.lower.height_in_mm
+        + cryostat_meta.inner.upper.height_in_mm
+        - cryostat_meta.gas_argon.height_in_mm,
         "kwargs": {"facecolor": "lightcyan"},
     }
 
     # add the outer cryostat
-    r_outer, z_outer = outer_cryostat_profile()
+    r_outer, z_outer = outer_cryostat_profile(cryostat_meta)
 
     outer = _construct_polycone(
         "outer_cryostat", r_outer, z_outer, reg, color=[0.7, 0.3, 0.3, 0.1], material=mats.metal_steel
     )
-    _place_pv("outer_cryostat", outer, world_log, z_pos=-150 - THICKNESS - SHIFT, reg=reg)
+    _place_pv(
+        "outer_cryostat",
+        outer,
+        world_log,
+        z_pos=-150 - cryostat_meta.inner.lower.thickness_in_mm - shift,
+        reg=reg,
+    )
 
     profiles["outer_cryostat"] = {
         "radius": r_outer,
         "height": z_outer,
-        "shift": -SHIFT - THICKNESS - 150,
+        "shift": -shift - cryostat_meta.inner.lower.thickness_in_mm - 150,
         "kwargs": {"facecolor": "blue", "edgecolor": "darkblue"},
     }
 
     # add the cryostat lid (for now just a cylinder)
-    lid_r, lid_z = cryostat_lid_profile()
+    lid_r, lid_z = cryostat_lid_profile(cryostat_meta)
 
     lid = _construct_polycone(
         "cryostat_lid", lid_r, lid_z, reg, color=[0.7, 0.3, 0.3, 0.1], material=mats.metal_steel
     )
-    z_lid = LOWER_HEIGHT + UPPER_HEIGHT + 3 - SHIFT
+    z_lid = cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm + 3 - shift
 
     _place_pv("cryostat_lid", lid, world_log, z_pos=z_lid, reg=reg)
 
@@ -327,17 +410,23 @@ def build_cryostat(
     }
 
     # add the lead
-    r_lead, z_lead = lead_profile()
+    r_lead, z_lead = lead_profile(cryostat_meta)
 
     lead = _construct_polycone(
         "lead_shield", r_lead, z_lead, reg, color=[0.9, 0.9, 0.9, 0.1], material="G4_Pb"
     )
-    _place_pv("lead_shield", lead, world_log, z_pos=-150 - THICKNESS - AIR_GAP - 2 - SHIFT, reg=reg)
+    _place_pv(
+        "lead_shield",
+        lead,
+        world_log,
+        z_pos=-150 - 2 * cryostat_meta.outer.thickness_in_mm - cryostat_meta.lead.air_gap_in_mm - shift,
+        reg=reg,
+    )
 
     profiles["lead_shield"] = {
         "radius": r_lead,
         "height": z_lead,
-        "shift": -SHIFT - THICKNESS - 150 - AIR_GAP - 2,
+        "shift": -150 - cryostat_meta.outer.thickness_in_mm - cryostat_meta.lead.air_gap_in_mm - shift,
         "kwargs": {"facecolor": "gray", "edgecolor": "grey", "alpha": 0.3},
     }
 
@@ -346,4 +435,4 @@ def build_cryostat(
         plot_profiles(profiles)
         plt.show()
 
-    return reg, LOWER_HEIGHT + UPPER_HEIGHT - LAR_FILL_HEIGHT
+    return reg

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from importlib import resources
+
+import dbetto
 import numpy as np
 import pyg4ometry
 from pygeomtools.materials import LegendMaterialRegistry
@@ -21,16 +24,22 @@ def test_build_cryostat():
     world_l = pyg4ometry.geant4.LogicalVolume(world_s, "G4_Galactic", "World", registry=reg)
     reg.setWorld(world_l)
 
-    reg, lar_height = build_cryostat(world_l, reg, mats, plot=False)
+    cryostat_meta = dbetto.AttrsDict(
+        dbetto.utils.load_dict(resources.files("pygeomscarf") / "configs" / "cryostat.yaml")
+    )
+
+    reg = build_cryostat(cryostat_meta, world_l, reg, mats, plot=False)
 
     assert isinstance(reg, pyg4ometry.geant4.Registry)
 
-    assert lar_height > 0
-
 
 def test_profiles():
+    cryostat_meta = dbetto.AttrsDict(
+        dbetto.utils.load_dict(resources.files("pygeomscarf") / "configs" / "cryostat.yaml")
+    )
+
     for prof in [outer_cryostat_profile, cryostat_lid_profile, lead_profile, inner_cryostat_profile]:
-        r, z = prof()
+        r, z = prof(cryostat_meta)
         assert isinstance(r, list)
         assert isinstance(z, list)
         assert len(r) == len(z)
