@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import os
 
+import pygeomtools.geometry
+
 from pygeomscarf.core import construct
 
 public_geom = os.getenv("LEGEND_METADATA", "") == ""
@@ -35,3 +37,20 @@ def test_construct():
     )
     assert reg.worldVolume is not None
     assert "source" in reg.logicalVolumeDict
+
+    # now with fiber shroud
+    reg = construct(
+        config={
+            "hpges": [{"name": "V09999A", "pplus_pos_from_lar_center": 120}],
+            "source": {"pos_from_lar_center": 150},
+            "fiber_shroud": {
+                "center_pos_from_lar_center": 0,
+            },
+        },
+        public_geometry=True,
+    )
+
+    assert reg.worldVolume is not None
+    assert "fiber_shroud" in reg.physicalVolumeDict
+
+    pygeomtools.geometry.check_registry_sanity(reg, reg)
