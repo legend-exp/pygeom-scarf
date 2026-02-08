@@ -32,6 +32,8 @@ def test_build_cryostat():
 
     assert isinstance(reg, pyg4ometry.geant4.Registry)
 
+    assert set(reg.surfaceDict.keys()) == {"bsurface_lar_cryostat","bsurface_cryostat_lar"}
+
 
 def test_profiles():
     cryostat_meta = dbetto.AttrsDict(

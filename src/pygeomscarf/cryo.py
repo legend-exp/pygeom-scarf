@@ -38,6 +38,7 @@ import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pygeomoptics
 from dbetto import AttrsDict
 from matplotlib.patches import Polygon
 from pyg4ometry import geant4
@@ -285,6 +286,43 @@ def plot_profiles(profiles: dict):
     plt.tight_layout()
 
 
+def set_steel_reflectivity(reg: geant4.Registry, cryostat_name: str, lar_name: str):
+    """Set the reflectivity of the inner cryostat.
+
+    Warning
+    -------
+    For now the reflectivity is set to that of copper, which should be similar.
+
+    Parameters
+    ----------
+    reg
+        The registry containing the logical volumes.
+    cryostat_name
+        The name of the inner cryostat physical volume volume.
+    lar_name
+        The name of the lar physical volume volume.
+
+    """
+    _to_steel = geant4.solid.OpticalSurface(
+        "surface_to_steel",
+        finish="ground",
+        model="unified",
+        surf_type="dielectric_metal",
+        value=0.5,
+        registry=reg,
+    )
+
+    pygeomoptics.copper.pyg4_copper_attach_reflectivity(_to_steel, reg)
+
+    cryostat = reg.physicalVolumeDict[cryostat_name]
+    lar = reg.physicalVolumeDict[lar_name]
+
+    geant4.BorderSurface("bsurface_lar_cryostat", lar, cryostat, _to_steel, reg)
+    geant4.BorderSurface("bsurface_cryostat_lar", cryostat, lar, _to_steel, reg)
+
+    return reg
+
+
 def build_cryostat(
     cryostat_meta: AttrsDict,
     world_log: geant4.LogicalVolume,
@@ -344,6 +382,8 @@ def build_cryostat(
         "shift": -shift + cryostat_meta.inner.lower.thickness_in_mm,
         "kwargs": {"facecolor": "cyan", "alpha": 1},
     }
+
+    reg = set_steel_reflectivity(reg, "lar", "inner_cryostat")
 
     # place gaseous argon as a daughter of the inner cryostat, to fill the gap between the LAr and the inner cryostat
 
