@@ -347,5 +347,5 @@ def build_cryostat(
     if plot:
         plot_profiles(profiles)
         plt.show()
-        
+
     return reg
