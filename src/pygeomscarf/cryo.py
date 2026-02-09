@@ -181,10 +181,10 @@ def outer_cryostat_profile(cryostat_meta: AttrsDict) -> tuple[list, list]:
 
     radius = [
         0,
-        outer.radius_in_mm + outer.thickness_in_mm,
-        outer.radius_in_mm + outer.thickness_in_mm,
         outer.radius_in_mm,
         outer.radius_in_mm,
+        outer.radius_in_mm - outer.thickness_in_mm,
+        outer.radius_in_mm - outer.thickness_in_mm,
         0,
     ]
 
