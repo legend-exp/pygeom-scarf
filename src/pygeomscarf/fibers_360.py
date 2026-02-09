@@ -20,7 +20,6 @@ class _FiberContainerShim:
     This class is internal and not part of the public API.
     """
 
-
     def __init__(self, registry, materials, hpge_string):
         self.registry = registry
         self.materials = materials
