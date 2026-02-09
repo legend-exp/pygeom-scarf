@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+import pint
 import pyg4ometry.geant4
 import pygeomoptics
 from legendmeta import LegendMetadata
@@ -11,6 +12,8 @@ from pygeomtools.materials import LegendMaterialRegistry
 
 from pygeomscarf.metadata import PublicMetadataProxy
 from pygeomscarf.utils import _place_pv
+
+u = pint.get_application_registry()
 
 FIBER_DIM = 1
 TPB_THICKNESS_UM = 1
@@ -147,6 +150,37 @@ def set_tpb_surface(tpb_name: str, lar_name: str, reg: geant4.Registry):
     )
 
 
+def set_fiber_core_surface(tpb_name: str, core_name: str, reg: geant4.Registry):
+    """Set the fiber core surface (to make sensitive).
+
+    This is important to allow the fiber core to act as a sensitive detector.
+
+    Parameters
+    ----------
+    tpb_name
+        The name of the TPB physical volume.
+    core_name
+        The name of the fiber core physical volume.
+    reg
+        The registry to add the optical properties to.
+    """
+    _to_fiber_core = geant4.solid.OpticalSurface(
+        "surface_to_fiber_core",
+        finish="ground",
+        model="unified",
+        surf_type="dielectric_metal",
+        value=0.05,
+        registry=reg,
+    )
+
+    _to_fiber_core.addProperty("EFFICIENCY", 1.0)
+
+    core_pv = reg.physicalVolumeDict[core_name]
+    tpb_pv = reg.physicalVolumeDict[tpb_name]
+
+    geant4.BorderSurface("bsurface_tpb_fiber", tpb_pv, core_pv, _to_fiber_core, reg)
+
+
 def build_strings(
     lar_lv: pyg4ometry.geant4.LogicalVolume,
     hpges: list,
@@ -228,5 +262,6 @@ def build_strings(
         )
 
         set_tpb_surface(tpb_name="fiber_shroud", lar_name="lar", reg=reg)
+        set_fiber_core_surface(core_name="fiber_core", tpb_name="fiber_shroud", reg=reg)
 
     return reg
