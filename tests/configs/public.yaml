@@ -3,7 +3,7 @@ hpges:
     pplus_pos_from_lar_center: 0
 
 source:
-  pos_from_lar_center: 00
+  pos_from_lar_center: 0
 
 fiber_shroud:
   center_pos_from_lar_center: 0
