@@ -33,7 +33,7 @@ def set_germanium_reflectivity(hpge: geant4.PhysicalVolume, reg: geant4.Registry
 
     """
     _to_germanium = geant4.solid.OpticalSurface(
-        "surface_to_germanium",
+        f"surface_to_germanium_{hpge.name}",
         finish="ground",
         model="unified",
         surf_type="dielectric_metal",
