@@ -267,7 +267,7 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
         return m
 
 
-def make_closed_cylinder_mm(name, inner_r_mm, outer_r_mm, height_mm, thickness_mm, reg, plate_extra_r_mm):
+def make_capped_cylindrical_shell(name, inner_r_mm, outer_r_mm, height_mm, thickness_mm, reg, plate_extra_r_mm):
     """
     Create a closed cylinder (wall + top & bottom plates) in mm. Returns a solid (union).
     inner_r_mm: inner radius in mm
@@ -434,7 +434,7 @@ def build_geometry():
         registry=reg,
     )
 
-    enclosure_bege_solid = make_closed_cylinder_mm(
+    enclosure_bege_solid = make_capped_cylindrical_shell(
         "enclosure_bege",
         inner_r_mm=37.5,  # mm
         outer_r_mm=39.0,  # mm
@@ -444,7 +444,7 @@ def build_geometry():
         plate_extra_r_mm=5.0,
     )
 
-    enclosure_icpc_solid = make_closed_cylinder_mm(
+    enclosure_icpc_solid = make_capped_cylindrical_shell(
         "enclosure_icpc",
         inner_r_mm=39.5,
         outer_r_mm=41.0,
