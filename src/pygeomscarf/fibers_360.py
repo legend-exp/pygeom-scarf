@@ -6,13 +6,20 @@ from pygeoml1000.fibers import FiberModuleData, ModuleFactorySingleFibers
 __all__ = ["build_fiber_shroud"]
 
 
-class _DummyContainer:
+class _FiberContainerShim:
     """
-    Minimal container object required by pygeoml1000 to attach
-    fiber modules to an existing geometry.
+    Minimal shim object required by pygeoml1000 to attach fiber modules
+    to an already-existing Geant4 geometry.
 
-    This is an internal helper and not part of the public API.
+    pygeoml1000 module factories expect a container object providing
+    access to a registry, materials, a mother logical/physical volume,
+    and selected metadata. In this use case, the detector geometry
+    already exists, so this shim supplies only the required attributes
+    without constructing a full geometry hierarchy.
+
+    This class is internal and not part of the public API.
     """
+
 
     def __init__(self, registry, materials, hpge_string):
         self.registry = registry
@@ -54,7 +61,7 @@ def build_fiber_shroud(
     # ------------------------------------------------------------------
     # 1) Minimal container required by pygeoml1000
     # ------------------------------------------------------------------
-    container = _DummyContainer(registry, materials, hpge_string)
+    container = _FiberContainerShim(registry, materials, hpge_string)
 
     container.mother_lv = lar_pv.logicalVolume
     container.mother_pv = lar_pv
