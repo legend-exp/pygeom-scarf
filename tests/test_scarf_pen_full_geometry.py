@@ -267,7 +267,9 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
         return m
 
 
-def make_capped_cylindrical_shell(name, inner_r_mm, outer_r_mm, height_mm, thickness_mm, reg, plate_extra_r_mm):
+def make_capped_cylindrical_shell(
+    name, inner_r_mm, outer_r_mm, height_mm, thickness_mm, reg, plate_extra_r_mm
+):
     """
     Create a closed cylinder (wall + top & bottom plates) in mm. Returns a solid (union).
     inner_r_mm: inner radius in mm
