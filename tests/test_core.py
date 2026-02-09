@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 import pygeomtools.geometry
 
@@ -13,7 +14,7 @@ def test_import():
     import pygeomscarf  # noqa: F401
 
 
-def test_construct():
+def test_construct(tmp_path):
     # just cryostat
     reg = construct(public_geometry=True)
     assert reg.worldVolume is not None
@@ -54,3 +55,6 @@ def test_construct():
     assert "fiber_shroud" in reg.physicalVolumeDict
 
     pygeomtools.geometry.check_registry_sanity(reg, reg)
+
+    # test the gdml can be written
+    pygeomtools.write_pygeom(reg, Path(tmp_path) / "test.gdml")
