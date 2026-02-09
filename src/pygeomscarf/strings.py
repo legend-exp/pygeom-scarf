@@ -176,7 +176,8 @@ def set_fiber_core_surface(tpb_name: str, core_name: str, reg: geant4.Registry):
 
     with u.context("sp"):
         _to_fiber_core.addVecPropertyPint("EFFICIENCY", λ.to("eV"), np.ones_like(λ))
-
+        _to_fiber_core.addVecPropertyPint("REFLECTIVITY", λ.to("eV"), np.zeros_like(λ))
+        
     core_pv = reg.physicalVolumeDict[core_name]
     tpb_pv = reg.physicalVolumeDict[tpb_name]
 
