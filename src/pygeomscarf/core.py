@@ -5,12 +5,12 @@ import logging
 from importlib import resources
 
 import dbetto
-import numpy as np
 from git import GitCommandError
 from legendmeta import LegendMetadata
 from pyg4ometry import geant4
 from pygeomtools.materials import LegendMaterialRegistry
 
+from pygeomscarf.cavern import construct_cavern
 from pygeomscarf.cryo import build_cryostat
 from pygeomscarf.metadata import PublicMetadataProxy
 from pygeomscarf.source import build_source
@@ -131,24 +131,12 @@ def construct(
         )
 
     if "cavern" in config:
-        cavern = geant4.solid.Sphere(
-            "cavern",
-            pRmin=config["cavern"]["inner_radius_in_mm"],
-            pRmax=config["cavern"]["outer_radius_in_mm"],
-            pSPhi=0,
-            pDPhi=2 * np.pi,
-            pSTheta=0,
-            pDTheta=np.pi,
-            nslice=720,
-            nstack=180,
-            registry=reg,
-            lunit="mm",
+        construct_cavern(
+            world_lv=world_lv,
+            mat=mats.rock,
+            inner_radius=config["cavern"]["inner_radius_in_mm"],
+            outer_radius=config["cavern"]["outer_radius_in_mm"],
+            reg=reg,
         )
-
-        cavern_lv = geant4.LogicalVolume(cavern, mats.rock, "cavern", registry=reg)
-
-        cavern_lv.pygeom_color_rgba = [0.5, 0.5, 0.5, 0.01]
-
-        geant4.PhysicalVolume([0, 0, 0], [0, 0, 0, "m"], cavern_lv, "cavern", world_lv, reg)
 
     return reg
