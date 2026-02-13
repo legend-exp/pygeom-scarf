@@ -53,7 +53,19 @@ hpges:
 
 source:
   pos_from_lar_center: 0 # position from the center of the LAr
+
+fiber_shroud:
+  mode: "simplified" # only mode supported for now
+  height_in_mm: 1200
+  radius_in_mm: 200
+  center_pos_from_lar_center: 0
+
+cavern:
+  inner_radius_in_mm: 7000
+  outer_radius_in_mm: 15000
 ```
+
+::: note The cavern and fiber shroud implementation is very simplified. :::
 
 ```{toctree}
 :maxdepth: 1
