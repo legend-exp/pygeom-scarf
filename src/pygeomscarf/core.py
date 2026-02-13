@@ -97,7 +97,7 @@ def construct(
 
     # Create the world volume
     world_material = geant4.MaterialPredefined("G4_Galactic")
-    world = geant4.solid.Box("world", 30, 30, 30, reg, "m")
+    world = geant4.solid.Box("world", 50, 50, 50, reg, "m")
     world_lv = geant4.LogicalVolume(world, world_material, "world", reg)
     reg.setWorld(world_lv)
 
@@ -131,7 +131,7 @@ def construct(
         )
 
     if "cavern" in config:
-        construct_cavern(
+        reg = construct_cavern(
             world_lv=world_lv,
             mat=mats.rock,
             inner_radius=config["cavern"]["inner_radius_in_mm"],
