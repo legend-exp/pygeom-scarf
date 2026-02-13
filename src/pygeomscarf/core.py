@@ -5,6 +5,7 @@ import logging
 from importlib import resources
 
 import dbetto
+import numpy as np
 from git import GitCommandError
 from legendmeta import LegendMetadata
 from pyg4ometry import geant4
@@ -49,6 +50,9 @@ def construct(
                 height_in_mm: 1200
                 radius_in_mm: 200
                 center_pos_from_lar_center: 120
+            cavern:
+                inner_radius_in_mm: 5000
+                outer_radius_in_mm: 12000
 
         - If the ``hpges`` key is present, the geometry will include HPGe detectors, which will be placed at the specified positions (in mm) from the bottom of the cryostat.
         - The ``source`` key can be used to place a source at a specified position from the bottom of the cryostat.
@@ -93,7 +97,7 @@ def construct(
 
     # Create the world volume
     world_material = geant4.MaterialPredefined("G4_Galactic")
-    world = geant4.solid.Box("world", 20, 20, 20, reg, "m")
+    world = geant4.solid.Box("world", 30, 30, 30, reg, "m")
     world_lv = geant4.LogicalVolume(world, world_material, "world", reg)
     reg.setWorld(world_lv)
 
@@ -125,5 +129,26 @@ def construct(
             z_pos=config["source"]["pos_from_lar_center"] + lar_height / 2 + lar_offset,
             reg=reg,
         )
+
+    if "cavern" in config:
+        cavern = geant4.solid.Sphere(
+            "cavern",
+            pRmin=config["cavern"]["inner_radius_in_mm"],
+            pRmax=config["cavern"]["outer_radius_in_mm"],
+            pSPhi=0,
+            pDPhi=2 * np.pi,
+            pSTheta=0,
+            pDTheta=np.pi,
+            nslice=720,
+            nstack=180,
+            registry=reg,
+            lunit="mm",
+        )
+
+        cavern_lv = geant4.LogicalVolume(cavern, mats.rock, "cavern", registry=reg)
+
+        cavern_lv.pygeom_color_rgba = [0.5, 0.5, 0.5, 0.01]
+
+        geant4.PhysicalVolume([0, 0, 0], [0, 0, 0, "m"], cavern_lv, "cavern", world_lv, reg)
 
     return reg
