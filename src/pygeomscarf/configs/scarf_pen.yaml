@@ -1,0 +1,155 @@
+# ============================================================
+# SCARF PEN geometry configuration
+# ============================================================
+
+geometry:
+  name: scarf_pen
+  units: mm
+
+# ------------------------------------------------------------
+# Liquid Argon volume
+# ------------------------------------------------------------
+lar:
+  radius_mm: 120
+  half_height_mm: 250
+
+# ------------------------------------------------------------
+# HPGe detectors
+# ------------------------------------------------------------
+hpge:
+  enabled: true
+
+  detectors:
+    bege:
+      enabled: true
+      meta:
+        name: B00000B
+        type: bege
+        production:
+          enrichment:
+            val: 0.076
+            unc: 0.003
+          mass_in_g: 697.0
+        geometry:
+          height_in_mm: 32.0
+          radius_in_mm: 37.0
+          groove:
+            depth_in_mm: 3.0
+            radius_in_mm:
+              outer: 11.0
+              inner: 7.5
+          pp_contact:
+            radius_in_mm: 7.5
+            depth_in_mm: 0
+          taper:
+            top:
+              angle_in_deg: 0.0
+              height_in_mm: 0.0
+            bottom:
+              angle_in_deg: 45.0
+              height_in_mm: 8.0
+
+      placement:
+        z_mm: 50.0
+
+      enclosure:
+        enabled: true
+        inner_r_mm: 37.5
+        outer_r_mm: 39.0
+        height_mm: 69.0
+        cap_thickness_mm: 1.5
+        cap_extra_radius_mm: 5.0
+        z_offset_mm: 16.0
+
+    icpc:
+      enabled: true
+      meta:
+        name: V99000A
+        type: icpc
+        production:
+          enrichment:
+            val: 0.076
+            unc: 0.003
+          mass_in_g: 1500.0
+        geometry:
+          height_in_mm: 65.0
+          radius_in_mm: 39.0
+          borehole:
+            radius_in_mm: 5.0
+            depth_in_mm: 32.0
+          pp_contact:
+            radius_in_mm: 4.0
+            depth_in_mm: 3.0
+          outer_contact:
+            thickness_in_mm: 0.7
+          passivation:
+            thickness_in_mm: 0.3
+          groove:
+            radius_in_mm:
+              outer: 11.0
+              inner: 7.5
+            depth_in_mm: 3.0
+          taper:
+            top:
+              angle_in_deg: 45.0
+              height_in_mm: 3.0
+            bottom:
+              angle_in_deg: 45.0
+              height_in_mm: 3.0
+            borehole:
+              angle_in_deg: 45.0
+              height_in_mm: 3.0
+
+      placement:
+        z_mm: -75.0
+
+      enclosure:
+        enabled: true
+        inner_r_mm: 39.5
+        outer_r_mm: 41.0
+        height_mm: 134.0
+        cap_thickness_mm: 1.5
+        cap_extra_radius_mm: 5.0
+        z_offset_mm: 32.5
+
+# ------------------------------------------------------------
+# Fiber shroud (NOT SiPMs – fibers!)
+# ------------------------------------------------------------
+fibers:
+  enabled: true
+
+  shroud:
+    radius_mm: 50
+    fiber_length_mm: 200
+    fiber_count_per_module: 45
+    number_of_modules: 6
+    z_displacement_mm: 100
+
+  tpb:
+    thickness_nm: 150
+
+  channels:
+    base_rawid: 1000
+
+# ------------------------------------------------------------
+# Fiber placement around HPGe strings
+# ------------------------------------------------------------
+fiber_strings:
+  - id: "0"
+    angle_deg: 0
+    radius_mm: 150
+  - id: "1"
+    angle_deg: 120
+    radius_mm: 150
+  - id: "2"
+    angle_deg: 240
+    radius_mm: 150
+  - id: "3"
+    angle_deg: 60
+    radius_mm: 170
+  - id: "4"
+    angle_deg: 180
+    radius_mm: 170
+  - id: "5"
+    angle_deg: 300
+    radius_mm: 170
