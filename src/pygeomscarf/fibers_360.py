@@ -3,7 +3,10 @@ from __future__ import annotations
 import pyg4ometry.geant4 as g4
 from pygeoml1000.fibers import FiberModuleData, ModuleFactorySingleFibers
 
-__all__ = ["build_fiber_shroud"]
+__all__ = [
+    "build_fiber_shroud",
+    "build_fiber_shroud_from_config",
+]
 
 
 class _FiberContainerShim:
@@ -111,4 +114,81 @@ def build_fiber_shroud(
     # 5) Collect SiPM physical volumes
     # ------------------------------------------------------------------
 
-    return {pv.name: pv for pv in registry.physicalVolumeDict.values() if pv.name.startswith("sipm_")}
+    return {
+        pv.name: pv
+        for pv in registry.physicalVolumeDict.values()
+        if pv.name.startswith("sipm_")
+    }
+
+
+def build_fiber_shroud_from_config(
+    registry,
+    lar_pv: g4.PhysicalVolume,
+    materials,
+    config,
+):
+    """
+    Build a 360° LEGEND fiber shroud using parameters from a config dict.
+    """
+
+    fiber_cfg = config["fibers"]
+
+    # ------------------------------------------------------------------
+    # 1) Minimal container
+    # ------------------------------------------------------------------
+    container = _FiberContainerShim(
+        registry,
+        materials,
+        fiber_cfg["container"]["hpge_string"],
+    )
+
+    container.mother_lv = lar_pv.logicalVolume
+    container.mother_pv = lar_pv
+    container.mother_z_displacement = 0.0
+    container.mother_x_displacement = 0.0
+
+    registry._world = lar_pv
+
+    # ------------------------------------------------------------------
+    # 2) Fiber modules (from config)
+    # ------------------------------------------------------------------
+    mod_cfg = fiber_cfg["modules"]
+
+    modules = []
+    for i in range(mod_cfg["count"]):
+        modules.append(
+            FiberModuleData(
+                barrel="inner",
+                name=f"{mod_cfg['name_prefix']}{i}",
+                tpb_thickness=mod_cfg["tpb_thickness_nm"],
+                channel_top_name=f"{mod_cfg['channel_top_prefix']}{i}",
+                channel_bottom_name=f"{mod_cfg['channel_bottom_prefix']}{i}",
+                channel_top_rawid=mod_cfg["base_rawid"] + 2 * i,
+                channel_bottom_rawid=mod_cfg["base_rawid"] + 2 * i + 1,
+                string_id=str(i),
+            )
+        )
+
+    # ------------------------------------------------------------------
+    # 3) Fiber module factory (from config)
+    # ------------------------------------------------------------------
+    factory = ModuleFactorySingleFibers(
+        materials=materials,
+        registry=registry,
+        **fiber_cfg["factory"],
+    )
+
+    # ------------------------------------------------------------------
+    # 4) Build fibers and SiPMs
+    # ------------------------------------------------------------------
+    for module in modules:
+        factory.create_module(module, container)
+
+    # ------------------------------------------------------------------
+    # 5) Collect SiPM physical volumes
+    # ------------------------------------------------------------------
+    return {
+        pv.name: pv
+        for pv in registry.physicalVolumeDict.values()
+        if pv.name.startswith("sipm_")
+    }
