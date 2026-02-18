@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 import logging
 
-from dbetto import utils
+from dbetto import TextDB, utils
 from pyg4ometry import config as meshconfig
 from pygeomtools import geometry, write_pygeom
 
@@ -31,10 +31,14 @@ def dump_gdml_cli(argv: list[str] | None = None) -> None:
     if vis_scene.get("fine_mesh", False) or args.check_overlaps:
         meshconfig.setGlobalMeshSliceAndStack(100)
 
+    if args.extra_detectors is not None:
+        extra_detectors = TextDB(args.extra_detectors)
+
     registry = core.construct(
         config=config,
         public_geometry=args.public_geom,
         plot_cryostat=args.plot_cryostat,
+        extra_detectors=extra_detectors if args.extra_detectors is not None else None,
     )
 
     if args.print_volumes:
@@ -130,6 +134,12 @@ def _parse_cli_args(argv: list[str] | None = None) -> tuple[argparse.Namespace, 
         "--config",
         action="store",
         help="""Select a config file to read geometry config from.""",
+    )
+    geom_opts.add_argument(
+        "--extra-detectors",
+        action="store",
+        default=None,
+        help="""Path for config files for extra detectors (e.g. non-LEGEND detectors)""",
     )
 
     parser.add_argument(

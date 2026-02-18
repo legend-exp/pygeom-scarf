@@ -15,6 +15,7 @@ from pygeomscarf.cryo import build_cryostat
 from pygeomscarf.metadata import PublicMetadataProxy
 from pygeomscarf.source import build_source
 from pygeomscarf.strings import build_strings
+from pygeomscarf.utils import merge_configs
 
 log = logging.getLogger(__name__)
 
@@ -23,6 +24,7 @@ def construct(
     config: str | dict | None = None,
     public_geometry: bool = False,
     plot_cryostat: bool = False,
+    extra_detectors: dbetto.TextDB | None = None,
 ) -> geant4.Registry:
     """Construct the SCARF geometry and return the registry containing the world volume.
 
@@ -63,6 +65,8 @@ def construct(
     public_geometry
       if true, uses the public geometry metadata instead of the LEGEND-internal
       legend-metadata.
+    extra_detectors
+        If provided, should be a dictionary containing extra detector metadata, for example detectors not from LEGEND.
     """
     if isinstance(config, str):
         config = dbetto.utils.load_dict(config)
@@ -81,7 +85,18 @@ def construct(
     if lmeta is None:
         msg = "CONSTRUCTING GEOMETRY FROM PUBLIC DATA ONLY"
         log.warning(msg)
-        lmeta = PublicMetadataProxy()
+
+        # get a list of detectors
+        hpges = config.get("hpges", []) if config is not None else []
+        dets = [
+            hpge["name"] for hpge in hpges if extra_detectors is None or hpge["name"] not in extra_detectors
+        ]
+
+        lmeta = PublicMetadataProxy(dets)
+
+    det_meta = merge_configs(
+        dbetto.AttrsDict(dict(lmeta.hardware.detectors.germanium.diodes)), extra_detectors
+    )
 
     config = config if config is not None else {}
 
@@ -118,7 +133,13 @@ def construct(
     )
     # place the hpge and fibers
     reg = build_strings(
-        lar_lv, hpges, mats, lmeta, reg, lar_height=lar_height, fiber_shroud=config.get("fiber_shroud", None)
+        lar_lv,
+        hpges,
+        mats,
+        det_meta,
+        reg,
+        lar_height=lar_height,
+        fiber_shroud=config.get("fiber_shroud", None),
     )
 
     # source
