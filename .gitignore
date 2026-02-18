@@ -166,3 +166,4 @@ cython_debug/
 .DS_Store
 .aider*
 tests/combined_geometry.gdml
+*.gdml
