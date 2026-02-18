@@ -5,7 +5,6 @@ from collections.abc import Container
 from importlib import resources
 
 import pyg4ometry
-from dbetto import AttrsDict
 from pyg4ometry import geant4
 
 from . import core
