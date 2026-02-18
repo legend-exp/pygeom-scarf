@@ -46,7 +46,7 @@ def _place_pv(
     geant4.PhysicalVolume([0, 0, 0], [0, 0, z_pos, "mm"], log, name, mother, registry=reg)
 
 
-def merge_configs(base: TextDB | AttrsDict, extra: TextDB | AttrsDict | None) -> AttrsDict | TextDB:
+def merge_configs(base: AttrsDict, extra: AttrsDict | None) -> AttrsDict :
     """Merge two configuration dictionaries, with the values from the extra dictionary taking precedence over the base dictionary."""
 
     if extra is None:
