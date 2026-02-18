@@ -31,6 +31,7 @@ def dump_gdml_cli(argv: list[str] | None = None) -> None:
     if vis_scene.get("fine_mesh", False) or args.check_overlaps:
         meshconfig.setGlobalMeshSliceAndStack(100)
 
+    extra_detectors = None
     if args.extra_detectors is not None:
         extra_detectors = TextDB(args.extra_detectors)
 
