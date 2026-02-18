@@ -167,3 +167,4 @@ cython_debug/
 .aider*
 tests/combined_geometry.gdml
 *.gdml
+local_configs/
