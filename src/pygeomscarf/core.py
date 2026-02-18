@@ -66,7 +66,7 @@ def construct(
       if true, uses the public geometry metadata instead of the LEGEND-internal
       legend-metadata.
     extra_detectors
-        If provided, should be a dictionary containing extra detector metadata, for example detectors not from LEGEND.
+        If provided, should be a TextDB object containing extra detector metadata, for example detectors not from LEGEND.
     """
     if isinstance(config, str):
         config = dbetto.utils.load_dict(config)

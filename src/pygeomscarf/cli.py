@@ -139,7 +139,7 @@ def _parse_cli_args(argv: list[str] | None = None) -> tuple[argparse.Namespace, 
         "--extra-detectors",
         action="store",
         default=None,
-        help="""Path for config files for extra detectors (e.g. non-LEGEND detectors)""",
+        help="""Path to directory containing config files for extra detectors (e.g. non-LEGEND detectors)""",
     )
 
     parser.add_argument(

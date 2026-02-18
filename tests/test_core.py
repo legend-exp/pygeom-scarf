@@ -60,7 +60,7 @@ def test_construct(tmp_path):
     # test the gdml can be written
     pygeomtools.write_pygeom(reg, Path(tmp_path) / "test.gdml")
 
-    db = TextDB(f"{Path(__file__).parent}/configs/extra")
+    db = TextDB(Path(__file__).parent / "configs" / "extra")
 
     reg = construct(
         config={

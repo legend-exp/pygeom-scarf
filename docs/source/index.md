@@ -71,8 +71,8 @@ Generally the detectors should be present in the LEGEND detectors database. In
 addition, {func}`core.construct` supports passing a `TextDB` of additional
 detector metadata.
 
-This can also be passed to on the command line, the flag `--extra-detectors` can
-be used to provide the path to a directory containing extra detector metadata
+This can also be passed on the command line, the flag `--extra-detectors` can be
+used to provide the path to a directory containing extra detector metadata
 files. Similar to
 [legend-detectors](https://github.com/legend-exp/legend-detectors/tree/main/germanium/diodes),
 each detector should have a YAML configuration file named according to the
