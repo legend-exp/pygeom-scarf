@@ -114,11 +114,7 @@ def build_fiber_shroud(
     # 5) Collect SiPM physical volumes
     # ------------------------------------------------------------------
 
-    return {
-        pv.name: pv
-        for pv in registry.physicalVolumeDict.values()
-        if pv.name.startswith("sipm_")
-    }
+    return {pv.name: pv for pv in registry.physicalVolumeDict.values() if pv.name.startswith("sipm_")}
 
 
 def build_fiber_shroud_from_config(
@@ -187,8 +183,4 @@ def build_fiber_shroud_from_config(
     # ------------------------------------------------------------------
     # 5) Collect SiPM physical volumes
     # ------------------------------------------------------------------
-    return {
-        pv.name: pv
-        for pv in registry.physicalVolumeDict.values()
-        if pv.name.startswith("sipm_")
-    }
+    return {pv.name: pv for pv in registry.physicalVolumeDict.values() if pv.name.startswith("sipm_")}

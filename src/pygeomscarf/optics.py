@@ -2,12 +2,9 @@ from __future__ import annotations
 
 import pint
 import pyg4ometry.geant4 as g4
+from pygeomoptics import fibers, lar, pen, tpb
 from pygeomtools.materials import BaseMaterialRegistry
 from pygeomtools.materials import cached_property as pg_cached_property
-
-from pygeomoptics import fibers, lar, pen, tpb
-
-
 
 u = pint.get_application_registry()
 
@@ -223,4 +220,3 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
         )
         m.add_element_natoms(self.get_element("Cu"), 1)
         return m
-
