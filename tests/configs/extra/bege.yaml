@@ -1,0 +1,25 @@
+name: bege
+type: bege
+production:
+  enrichment:
+    val: 0.874
+    unc: 0.003
+  mass_in_g: 697.0
+geometry:
+  height_in_mm: 29.46
+  radius_in_mm: 36.98
+  groove:
+    depth_in_mm: 2.0
+    radius_in_mm:
+      outer: 10.5
+      inner: 7.5
+  pp_contact:
+    radius_in_mm: 7.5
+    depth_in_mm: 0
+  taper:
+    top:
+      angle_in_deg: 0.0
+      height_in_mm: 0.0
+    bottom:
+      angle_in_deg: 0.
+      height_in_mm: 0.

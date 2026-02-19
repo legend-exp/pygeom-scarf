@@ -5,6 +5,7 @@ from collections.abc import Container
 from importlib import resources
 
 import pyg4ometry
+from dbetto import AttrsDict
 from pyg4ometry import geant4
 
 from . import core
@@ -43,3 +44,23 @@ def _place_pv(
     """Place the polcyone (on-axis) into the registry."""
 
     geant4.PhysicalVolume([0, 0, 0], [0, 0, z_pos, "mm"], log, name, mother, registry=reg)
+
+
+def merge_configs(base: AttrsDict, extra: AttrsDict | None) -> AttrsDict:
+    """Merge two configuration dictionaries into a new one.
+
+    The returned configuration contains all entries from ``base`` with values from
+    ``extra`` (if given) taking precedence. The input dictionaries are not
+    mutated.
+    """
+
+    # Always work on a shallow copy to avoid mutating the caller's base config.
+    merged = base.copy()
+
+    if extra is None:
+        return merged
+
+    for det, meta in extra.items():
+        merged[det] = meta
+
+    return merged

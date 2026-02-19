@@ -1,16 +1,15 @@
 from __future__ import annotations
 
+import dbetto
 import numpy as np
 import pint
 import pyg4ometry.geant4
 import pygeomoptics
-from legendmeta import LegendMetadata
 from pyg4ometry import geant4
 from pygeomhpges import make_hpge
 from pygeomtools.detectors import RemageDetectorInfo
 from pygeomtools.materials import LegendMaterialRegistry
 
-from pygeomscarf.metadata import PublicMetadataProxy
 from pygeomscarf.utils import _place_pv
 
 u = pint.get_application_registry()
@@ -188,7 +187,7 @@ def build_strings(
     lar_lv: pyg4ometry.geant4.LogicalVolume,
     hpges: list,
     mats: LegendMaterialRegistry,
-    meta: LegendMetadata | PublicMetadataProxy,
+    det_meta: dbetto.TextDB,
     reg: pyg4ometry.geant4.Registry,
     lar_height: float,
     fiber_shroud: dict | None = None,
@@ -212,8 +211,8 @@ def build_strings(
                 position_from_cryostat_bottom_in_mm: 230
     mats
         The material registry to use for constructing the strings.
-    meta
-        The metadata to use for constructing the strings.
+    det_meta
+        The metadata containing the information on the detectors.
     reg
         The registry to add the strings to.
 
@@ -235,7 +234,7 @@ def build_strings(
         name = hpge["name"]
         z_pos = lar_height / 2.0 + hpge["pplus_pos_from_lar_center"]
 
-        hpge_meta = meta.hardware.detectors.germanium.diodes[name]
+        hpge_meta = det_meta[name]
 
         if hpge_meta.production.enrichment.val is None:
             hpge_meta["production"]["enrichment"]["val"] = 0.9

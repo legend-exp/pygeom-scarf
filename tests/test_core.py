@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 import pygeomtools.geometry
+from dbetto import TextDB
 
 from pygeomscarf.core import construct
 
@@ -58,3 +59,21 @@ def test_construct(tmp_path):
 
     # test the gdml can be written
     pygeomtools.write_pygeom(reg, Path(tmp_path) / "test.gdml")
+
+    db = TextDB(Path(__file__).parent / "configs" / "extra")
+
+    reg = construct(
+        config={
+            "hpges": [{"name": "bege", "pplus_pos_from_lar_center": 120}],
+            "source": {"pos_from_lar_center": 150},
+            "fiber_shroud": {
+                "center_pos_from_lar_center": 0,
+            },
+        },
+        extra_detectors=db,
+        public_geometry=True,
+    )
+
+    assert reg.worldVolume is not None
+
+    assert "bege" in reg.physicalVolumeDict
