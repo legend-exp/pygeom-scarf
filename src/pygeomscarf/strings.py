@@ -322,15 +322,14 @@ def build_strings(
         elif mode == "detailed":
             height = fiber_shroud.get("height_in_mm", 1000)
             n_fibers = fiber_shroud.get("n_fibers", 527)
-            
+
             fiber_lv = build_individual_fiber(
-                    mats=mats,
-                    reg=reg,
-                    shroud_height=height,
-                )
-                
+                mats=mats,
+                reg=reg,
+                shroud_height=height,
+            )
+
             for i in range(n_fibers):
-                
                 angle = i * 360 / n_fibers
 
                 radius = fiber_shroud.get("radius_in_mm", 115)
@@ -350,7 +349,9 @@ def build_strings(
                 set_tpb_surface(tpb_name=f"fiber_coating_{i}", lar_name="lar", reg=reg)
                 set_fiber_core_surface(core_name="fiber_core", tpb_name=f"fiber_coating_{i}", reg=reg)
 
-            reg.physicalVolumeDict["fiber_core"].pygeom_active_detector = RemageDetectorInfo("optical", 100, {})
+            reg.physicalVolumeDict["fiber_core"].pygeom_active_detector = RemageDetectorInfo(
+                "optical", 100, {}
+            )
 
         else:
             msg = f"Invalid fiber shroud mode: {mode}. Must be 'simplified' or 'detailed'."
