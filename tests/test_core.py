@@ -93,4 +93,4 @@ def test_construct(tmp_path):
         public_geometry=True,
     )
 
-    assert "fiber_core" in reg.physicalVolumeDict.keys()
+    assert "fiber_core" in reg.physicalVolumeDict
