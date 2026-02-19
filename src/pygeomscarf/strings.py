@@ -76,8 +76,8 @@ def build_individual_fiber(
 
     coating = geant4.solid.Box(
         "tpb_coating",
-        FIBER_DIM,
-        FIBER_DIM,
+        coating_dim,
+        coating_dim,
         shroud_height,
         reg,
         "mm",
