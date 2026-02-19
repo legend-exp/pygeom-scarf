@@ -53,6 +53,54 @@ def set_germanium_reflectivity(hpge: geant4.PhysicalVolume, reg: geant4.Registry
     return reg
 
 
+def build_individual_fiber(
+    mats: LegendMaterialRegistry,
+    reg: geant4.Registry,
+    shroud_height: float = 1000,
+):
+    """Build an individual fiber, with TPB coating.
+
+    Parameters
+    ----------
+    shroud_height
+        The height of the fiber shroud in mm.
+    shroud_radius
+        The radius of the fiber shroud in mm.
+    reg
+        The registry to add the fiber shroud to.
+    core_name
+        The name of the fiber core physical volume.
+    """
+    coating_dim = FIBER_DIM + 2 * TPB_THICKNESS_UM / 1e3
+
+    coating = geant4.solid.Box(
+        "tpb_coating",
+        coating_dim,
+        coating_dim,
+        shroud_height,
+        reg,
+        "mm",
+    )
+
+    coating_lv = geant4.LogicalVolume(coating, mats.tpb_on_fibers, "tpb_coating", reg)
+
+    core = geant4.solid.Box(
+        "fiber_core",
+        FIBER_DIM,
+        FIBER_DIM,
+        shroud_height,
+        reg,
+        "mm",
+    )
+    core_lv = geant4.LogicalVolume(core, mats.ps_fibers, "fiber_core", reg)
+
+    _place_pv("fiber_core", core_lv, coating_lv, 0, reg)
+
+    coating_lv.pygeom_color_rgba = [0, 1, 0.165, 0.07]
+
+    return coating_lv
+
+
 def build_fiber_shroud(
     mats: LegendMaterialRegistry,
     reg: geant4.Registry,
@@ -121,7 +169,7 @@ def set_tpb_surface(tpb_name: str, lar_name: str, reg: geant4.Registry):
         The registry to add the optical properties to.
     """
     lar_to_tpb = geant4.solid.OpticalSurface(
-        "surface_lar_to_tpb",
+        f"surface_lar_to_{tpb_name}",
         finish="ground",
         model="unified",
         surf_type="dielectric_dielectric",
@@ -164,7 +212,7 @@ def set_fiber_core_surface(tpb_name: str, core_name: str, reg: geant4.Registry):
         The registry to add the optical properties to.
     """
     _to_fiber_core = geant4.solid.OpticalSurface(
-        "surface_to_fiber_core",
+        f"surface_{tpb_name}_to_{core_name}",
         finish="ground",
         model="unified",
         surf_type="dielectric_metal",
@@ -180,7 +228,7 @@ def set_fiber_core_surface(tpb_name: str, core_name: str, reg: geant4.Registry):
     core_pv = reg.physicalVolumeDict[core_name]
     tpb_pv = reg.physicalVolumeDict[tpb_name]
 
-    geant4.BorderSurface("bsurface_tpb_fiber", tpb_pv, core_pv, _to_fiber_core, reg)
+    geant4.BorderSurface(f"bsurface_{tpb_name}", tpb_pv, core_pv, _to_fiber_core, reg)
 
 
 def build_strings(
@@ -251,19 +299,61 @@ def build_strings(
         reg = set_germanium_reflectivity(pv, reg, lar_name="lar")
 
     if fiber_shroud is not None:
-        shroud_lv = build_fiber_shroud(
-            mats=mats,
-            reg=reg,
-        )
-        _place_pv(
-            "fiber_shroud",
-            shroud_lv,
-            lar_lv,
-            lar_height / 2.0 + fiber_shroud["center_pos_from_lar_center"],
-            reg,
-        )
+        mode = fiber_shroud.get("mode", "simplified")
 
-        set_tpb_surface(tpb_name="fiber_shroud", lar_name="lar", reg=reg)
-        set_fiber_core_surface(core_name="fiber_core", tpb_name="fiber_shroud", reg=reg)
+        if mode == "simplified":
+            shroud_lv = build_fiber_shroud(
+                mats=mats,
+                reg=reg,
+                shroud_radius=fiber_shroud.get("radius_in_mm", 115),
+                shroud_height=fiber_shroud.get("height_in_mm", 1000),
+            )
+            _place_pv(
+                "fiber_shroud",
+                shroud_lv,
+                lar_lv,
+                lar_height / 2.0 + fiber_shroud["center_pos_from_lar_center"],
+                reg,
+            )
 
+            set_tpb_surface(tpb_name="fiber_shroud", lar_name="lar", reg=reg)
+            set_fiber_core_surface(core_name="fiber_core", tpb_name="fiber_shroud", reg=reg)
+
+        elif mode == "detailed":
+            height = fiber_shroud.get("height_in_mm", 1000)
+            n_fibers = fiber_shroud.get("n_fibers", 527)
+
+            fiber_lv = build_individual_fiber(
+                mats=mats,
+                reg=reg,
+                shroud_height=height,
+            )
+
+            for i in range(n_fibers):
+                angle = i * 360 / n_fibers
+
+                radius = fiber_shroud.get("radius_in_mm", 115)
+                x_pos = radius * np.cos(np.radians(angle))
+                y_pos = radius * np.sin(np.radians(angle))
+
+                geant4.PhysicalVolume(
+                    [0, 0, angle, "deg"],
+                    [x_pos, y_pos, z_pos, "mm"],
+                    fiber_lv,
+                    f"fiber_coating_{i}",
+                    lar_lv,
+                    registry=reg,
+                )
+
+                # set the surfaces for each fiber
+                set_tpb_surface(tpb_name=f"fiber_coating_{i}", lar_name="lar", reg=reg)
+                set_fiber_core_surface(core_name="fiber_core", tpb_name=f"fiber_coating_{i}", reg=reg)
+
+            reg.physicalVolumeDict["fiber_core"].pygeom_active_detector = RemageDetectorInfo(
+                "optical", 100, {}, allow_uid_reuse=True
+            )
+
+        else:
+            msg = f"Invalid fiber shroud mode: {mode}. Must be 'simplified' or 'detailed'."
+            raise ValueError(msg)
     return reg

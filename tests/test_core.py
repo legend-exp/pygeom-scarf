@@ -77,3 +77,23 @@ def test_construct(tmp_path):
     assert reg.worldVolume is not None
 
     assert "bege" in reg.physicalVolumeDict
+
+    # test the gdml can be written with extra detectors
+
+    reg = construct(
+        config={
+            "hpges": [{"name": "bege", "pplus_pos_from_lar_center": 120}],
+            "source": {"pos_from_lar_center": 150},
+            "fiber_shroud": {
+                "mode": "detailed",
+                "center_pos_from_lar_center": 0,
+            },
+        },
+        extra_detectors=db,
+        public_geometry=True,
+    )
+
+    assert "fiber_core" in reg.physicalVolumeDict
+
+    count = len([pv for pv in reg.physicalVolumeDict.values() if "fiber_coating" in pv.name])
+    assert count == 527
