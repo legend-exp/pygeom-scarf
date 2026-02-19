@@ -349,7 +349,9 @@ def build_strings(
                 set_tpb_surface(tpb_name=f"fiber_coating_{i}", lar_name="lar", reg=reg)
                 set_fiber_core_surface(core_name="fiber_core", tpb_name=f"fiber_coating_{i}", reg=reg)
 
-            reg.physicalVolumeDict["fiber_core"].pygeom_active_detector = RemageDetectorInfo("optical", 100, {}, allow_uid_reuse=True)
+            reg.physicalVolumeDict["fiber_core"].pygeom_active_detector = RemageDetectorInfo(
+                "optical", 100, {}, allow_uid_reuse=True
+            )
 
         else:
             msg = f"Invalid fiber shroud mode: {mode}. Must be 'simplified' or 'detailed'."
