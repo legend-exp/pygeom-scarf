@@ -94,3 +94,6 @@ def test_construct(tmp_path):
     )
 
     assert "fiber_core" in reg.physicalVolumeDict
+
+    count = len(pv for pv in reg.physicalVolumeDict.values() if "fiber_coating" in pv.name)
+    assert count == 527
