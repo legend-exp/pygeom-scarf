@@ -35,7 +35,7 @@ def test_pen_enclosure_wrapper(det_type):
 
 
 @pytest.mark.parametrize(
-    "det_type,det_r,det_h",
+    "det_type, det_r, det_h",
     [
         ("bege", 37.0, 32.0),
         ("icpc", 39.0, 65.0),
