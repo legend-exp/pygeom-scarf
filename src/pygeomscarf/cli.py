@@ -108,13 +108,13 @@ def _parse_cli_args(argv: list[str] | None = None) -> tuple[argparse.Namespace, 
         action="store_true",
         help="""Plot the cryostat profiles.""",
     )
-    
+
     parser.add_argument(
-    "--no-cryostat",
-    action="store_true",
-    help="""Build without the cryostat (useful for inspecting detectors/PEN enclosures).""",
+        "--no-cryostat",
+        action="store_true",
+        help="""Build without the cryostat (useful for inspecting detectors/PEN enclosures).""",
     )
-    
+
     parser.add_argument(
         "--check-overlaps",
         action="store_true",

@@ -10,12 +10,11 @@ from pygeomhpges import make_hpge
 from pygeomtools.detectors import RemageDetectorInfo
 from pygeomtools.materials import LegendMaterialRegistry
 
-from pygeomscarf.utils import _place_pv
-
 from pygeomscarf.models.enclosures import (
-    build_pen_polycone,
     PEN_ENCLOSURES,
+    build_pen_polycone,
 )
+from pygeomscarf.utils import _place_pv
 
 u = pint.get_application_registry()
 
@@ -304,12 +303,11 @@ def build_strings(
         # set reflectivity (skip if no LAr volume, e.g. --no-cryostat)
         if "lar" in reg.physicalVolumeDict:
             reg = set_germanium_reflectivity(pv, reg, lar_name="lar")
-        
+
         # --- PEN ENCLOSURE ---
         pen_cfg = hpge.get("pen", None)
 
         if pen_cfg and pen_cfg.get("enabled", False):
-
             # TEMP: detector type (adjust if metadata supports it)
             det_type = hpge_meta["type"].lower()
 
@@ -324,7 +322,7 @@ def build_strings(
 
             pen_lv = geant4.LogicalVolume(
                 pen_solid,
-                mats.pen,   # ⚠️ check this exists!
+                mats.pen,  # ⚠️ check this exists!
                 f"pen_{name}_lv",
                 registry=reg,
             )

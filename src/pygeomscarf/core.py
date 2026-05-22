@@ -90,9 +90,7 @@ def construct(
         # get a list of detectors
         hpges = config.get("hpges", []) if config is not None else []
         dets = [
-            hpge["name"]
-            for hpge in hpges
-            if extra_detectors is None or hpge["name"] not in extra_detectors
+            hpge["name"] for hpge in hpges if extra_detectors is None or hpge["name"] not in extra_detectors
         ]
 
         lmeta = PublicMetadataProxy(dets)
@@ -106,9 +104,7 @@ def construct(
 
     # extract the dimensions of the cryostat
     cryostat_meta = dbetto.AttrsDict(
-        dbetto.utils.load_dict(
-            resources.files("pygeomscarf") / "configs" / "cryostat.yaml"
-        )
+        dbetto.utils.load_dict(resources.files("pygeomscarf") / "configs" / "cryostat.yaml")
     )
 
     hpges = config.get("hpges", {})
@@ -130,24 +126,18 @@ def construct(
         lar_lv = reg.logicalVolumeDict["lar"]
         # the height of the LAr
         lar_height = (
-            cryostat_meta.inner.lower.height_in_mm
-            + cryostat_meta.inner.upper.height_in_mm
+            cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm
         ) - cryostat_meta.gas_argon.height_in_mm
 
         # the offset between the lar volume and the world
         lar_offset = (
             cryostat_meta.inner.lower.thickness_in_mm
-            - (
-                cryostat_meta.inner.lower.height_in_mm
-                + cryostat_meta.inner.upper.height_in_mm
-            )
-            / 2.0
+            - (cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm) / 2.0
         )
     else:
         lar_lv = world_lv
         lar_height = 0.0
         lar_offset = 0.0
-
 
     # place the hpge and fibers
     reg = build_strings(
@@ -164,8 +154,7 @@ def construct(
     if "source" in config:
         reg = build_source(
             world_lv,
-            radius=cryostat_meta.outer.radius_in_mm
-            + cryostat_meta.lead.air_gap_in_mm / 2.0,
+            radius=cryostat_meta.outer.radius_in_mm + cryostat_meta.lead.air_gap_in_mm / 2.0,
             z_pos=config["source"]["pos_from_lar_center"] + lar_height / 2 + lar_offset,
             reg=reg,
         )

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import pytest
 import pygeomtools.geometry
+import pytest
 from pyg4ometry import geant4
-from pyg4ometry.geant4 import Registry, LogicalVolume, PhysicalVolume, solid
+from pyg4ometry.geant4 import LogicalVolume, PhysicalVolume, Registry, solid
 
 from pygeomscarf.models.enclosures import (
     PEN_ENCLOSURES,
@@ -15,9 +15,7 @@ from pygeomscarf.models.enclosures import (
 def _make_world(reg):
     """Helper: minimal world volume to place enclosures in."""
     world_s = solid.Box("world_solid", 400, 400, 400, reg, "mm")
-    world_l = LogicalVolume(
-        world_s, geant4.MaterialPredefined("G4_Galactic"), "world_lv", reg
-    )
+    world_l = LogicalVolume(world_s, geant4.MaterialPredefined("G4_Galactic"), "world_lv", reg)
     reg.setWorld(world_l)
     return world_l
 
@@ -76,13 +74,11 @@ def test_pen_unknown_type_raises():
 @pytest.mark.parametrize("det_type", ["bege", "icpc"])
 def test_pen_registry_sanity(det_type):
     """Place enclosure in a world volume and run pygeomtools sanity check."""
-    reg     = Registry()
+    reg = Registry()
     world_l = _make_world(reg)
 
     pen_s = build_pen_polycone(det_type, registry=reg, **PEN_ENCLOSURES[det_type])
-    pen_l = LogicalVolume(
-        pen_s, geant4.MaterialPredefined("G4_POLYETHYLENE"), f"{det_type}_pen_lv", reg
-    )
+    pen_l = LogicalVolume(pen_s, geant4.MaterialPredefined("G4_POLYETHYLENE"), f"{det_type}_pen_lv", reg)
     PhysicalVolume([0, 0, 0], [0, 0, 0], pen_l, f"{det_type}_pen_pv", world_l, reg)
 
     pygeomtools.geometry.check_registry_sanity(reg, reg)
