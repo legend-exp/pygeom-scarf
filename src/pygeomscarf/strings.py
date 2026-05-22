@@ -12,6 +12,11 @@ from pygeomtools.materials import LegendMaterialRegistry
 
 from pygeomscarf.utils import _place_pv
 
+from pygeomscarf.models.enclosures import (
+    build_pen_polycone,
+    PEN_ENCLOSURES,
+)
+
 u = pint.get_application_registry()
 
 FIBER_DIM = 1
@@ -296,7 +301,49 @@ def build_strings(
         pv.pygeom_active_detector = RemageDetectorInfo("germanium", uid, hpge_meta)
 
         # set reflectivity
-        reg = set_germanium_reflectivity(pv, reg, lar_name="lar")
+        # set reflectivity (skip if no LAr volume, e.g. --no-cryostat)
+        if "lar" in reg.physicalVolumeDict:
+            reg = set_germanium_reflectivity(pv, reg, lar_name="lar")
+        
+        # --- PEN ENCLOSURE ---
+        pen_cfg = hpge.get("pen", None)
+
+        if pen_cfg and pen_cfg.get("enabled", False):
+
+            # TEMP: detector type (adjust if metadata supports it)
+            det_type = hpge_meta["type"].lower()
+
+            enc_dims = PEN_ENCLOSURES[det_type].copy()
+            z_offset = enc_dims.pop("z_offset_mm")
+
+            pen_solid = build_pen_polycone(
+                f"pen_{name}",
+                registry=reg,
+                **enc_dims,
+            )
+
+            pen_lv = geant4.LogicalVolume(
+                pen_solid,
+                mats.pen,   # ⚠️ check this exists!
+                f"pen_{name}_lv",
+                registry=reg,
+            )
+
+            _place_pv(
+                f"pen_{name}",
+                pen_lv,
+                lar_lv,
+                z_pos + z_offset,
+                reg,
+            )
+
+            # mark as active scintillator
+            pen_pv = reg.physicalVolumeDict[f"pen_{name}"]
+            pen_pv.pygeom_active_detector = RemageDetectorInfo(
+                "scintillator",
+                200 + uid,
+                {"name": f"PEN_{name}"},
+            )
 
     if fiber_shroud is not None:
         mode = fiber_shroud.get("mode", "simplified")
@@ -316,8 +363,10 @@ def build_strings(
                 reg,
             )
 
-            set_tpb_surface(tpb_name="fiber_shroud", lar_name="lar", reg=reg)
-            set_fiber_core_surface(core_name="fiber_core", tpb_name="fiber_shroud", reg=reg)
+            if "lar" in reg.physicalVolumeDict:
+                set_tpb_surface(tpb_name="fiber_shroud", lar_name="lar", reg=reg)
+            if "lar" in reg.physicalVolumeDict:
+                set_tpb_surface(tpb_name=f"fiber_coating_{i}", lar_name="lar", reg=reg)
 
         elif mode == "detailed":
             height = fiber_shroud.get("height_in_mm", 1000)
