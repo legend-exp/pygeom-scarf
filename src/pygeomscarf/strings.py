@@ -22,9 +22,7 @@ FIBER_DIM = 1
 TPB_THICKNESS_UM = 1
 
 
-def set_germanium_reflectivity(
-    hpge: geant4.PhysicalVolume, reg: geant4.Registry, lar_name: str = "lar"
-):
+def set_germanium_reflectivity(hpge: geant4.PhysicalVolume, reg: geant4.Registry, lar_name: str = "lar"):
     """Set the reflectivity of the germanium surfaces.
 
     Parameters
@@ -156,9 +154,7 @@ def build_fiber_shroud(
     # place the core
     _place_pv("fiber_core", core_lv, coating_lv, 0, reg)
 
-    reg.physicalVolumeDict["fiber_core"].pygeom_active_detector = RemageDetectorInfo(
-        "optical", 100, {}
-    )
+    reg.physicalVolumeDict["fiber_core"].pygeom_active_detector = RemageDetectorInfo("optical", 100, {})
 
     coating_lv.pygeom_color_rgba = [0, 1, 0.165, 0.07]
     return coating_lv
@@ -396,12 +392,10 @@ def build_strings(
 
                 # set the surfaces for each fiber
                 set_tpb_surface(tpb_name=f"fiber_coating_{i}", lar_name="lar", reg=reg)
-                set_fiber_core_surface(
-                    core_name="fiber_core", tpb_name=f"fiber_coating_{i}", reg=reg
-                )
+                set_fiber_core_surface(core_name="fiber_core", tpb_name=f"fiber_coating_{i}", reg=reg)
 
-            reg.physicalVolumeDict["fiber_core"].pygeom_active_detector = (
-                RemageDetectorInfo("optical", 100, {}, allow_uid_reuse=True)
+            reg.physicalVolumeDict["fiber_core"].pygeom_active_detector = RemageDetectorInfo(
+                "optical", 100, {}, allow_uid_reuse=True
             )
 
         else:
