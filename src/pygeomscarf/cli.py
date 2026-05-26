@@ -39,7 +39,6 @@ def dump_gdml_cli(argv: list[str] | None = None) -> None:
         config=config,
         public_geometry=args.public_geom,
         plot_cryostat=args.plot_cryostat,
-        no_cryostat=args.no_cryostat,
         extra_detectors=extra_detectors if args.extra_detectors is not None else None,
     )
 
@@ -107,12 +106,6 @@ def _parse_cli_args(argv: list[str] | None = None) -> tuple[argparse.Namespace, 
         "-p",
         action="store_true",
         help="""Plot the cryostat profiles.""",
-    )
-
-    parser.add_argument(
-        "--no-cryostat",
-        action="store_true",
-        help="""Build without the cryostat (useful for inspecting detectors/PEN enclosures).""",
     )
 
     parser.add_argument(

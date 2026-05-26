@@ -10,7 +10,7 @@ from pygeomhpges import make_hpge
 from pygeomtools.detectors import RemageDetectorInfo
 from pygeomtools.materials import LegendMaterialRegistry
 
-from pygeomscarf.models.enclosures import (
+from pygeomscarf.pen_enclosures import (
     PEN_ENCLOSURES,
     build_pen_polycone,
 )
@@ -322,7 +322,7 @@ def build_strings(
 
             pen_lv = geant4.LogicalVolume(
                 pen_solid,
-                mats.pen,  # ⚠️ check this exists!
+                mats.pen,
                 f"pen_{name}_lv",
                 registry=reg,
             )
@@ -342,6 +342,7 @@ def build_strings(
                 200 + uid,
                 {"name": f"PEN_{name}"},
             )
+            set_tpb_surface(tpb_name=f"pen_{name}", lar_name="lar", reg=reg)
 
     if fiber_shroud is not None:
         mode = fiber_shroud.get("mode", "simplified")
@@ -361,8 +362,8 @@ def build_strings(
                 reg,
             )
 
-            if "lar" in reg.physicalVolumeDict:
-                set_tpb_surface(tpb_name="fiber_shroud", lar_name="lar", reg=reg)
+            set_tpb_surface(tpb_name="fiber_shroud", lar_name="lar", reg=reg)
+            set_fiber_core_surface(core_name="fiber_core", tpb_name="fiber_shroud", reg=reg)
 
         elif mode == "detailed":
             height = fiber_shroud.get("height_in_mm", 1000)

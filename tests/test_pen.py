@@ -5,7 +5,7 @@ import pytest
 from pyg4ometry import geant4
 from pyg4ometry.geant4 import LogicalVolume, PhysicalVolume, Registry, solid
 
-from pygeomscarf.models.enclosures import (
+from pygeomscarf.pen_enclosures import (
     PEN_ENCLOSURES,
     build_pen_enclosure,
     build_pen_polycone,
