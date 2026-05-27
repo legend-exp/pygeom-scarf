@@ -300,9 +300,8 @@ def build_strings(
         pv.pygeom_active_detector = RemageDetectorInfo("germanium", uid, hpge_meta)
 
         # set reflectivity
-        # set reflectivity (skip if no LAr volume, e.g. --no-cryostat)
-        if "lar" in reg.physicalVolumeDict:
-            reg = set_germanium_reflectivity(pv, reg, lar_name="lar")
+
+        reg = set_germanium_reflectivity(pv, reg, lar_name="lar")
 
         # --- PEN ENCLOSURE ---
         pen_cfg = hpge.get("pen", None)

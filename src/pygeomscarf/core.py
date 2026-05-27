@@ -24,7 +24,6 @@ def construct(
     config: str | dict | None = None,
     public_geometry: bool = False,
     plot_cryostat: bool = False,
-    no_cryostat: bool = False,
     extra_detectors: dbetto.TextDB | None = None,
 ) -> geant4.Registry:
     """Construct the SCARF geometry and return the registry containing the world volume.
@@ -96,8 +95,7 @@ def construct(
         lmeta = PublicMetadataProxy(dets)
 
     det_meta = merge_configs(
-        dbetto.AttrsDict(dict(lmeta.hardware.detectors.germanium.diodes)),
-        extra_detectors,
+        dbetto.AttrsDict(dict(lmeta.hardware.detectors.germanium.diodes)), extra_detectors
     )
 
     config = config if config is not None else {}
@@ -120,25 +118,19 @@ def construct(
 
     # build the cryostat, extract the height of the LAr volume
     # this is used to align the HPGe strings to the center of the lar
+    reg = build_cryostat(cryostat_meta, world_lv, reg, mats, plot=plot_cryostat)
+    lar_lv = reg.logicalVolumeDict["lar"]
 
-    if not no_cryostat:
-        reg = build_cryostat(cryostat_meta, world_lv, reg, mats, plot=plot_cryostat)
-        lar_lv = reg.logicalVolumeDict["lar"]
-        # the height of the LAr
-        lar_height = (
-            cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm
-        ) - cryostat_meta.gas_argon.height_in_mm
+    # the height of the LAr
+    lar_height = (
+        cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm
+    ) - cryostat_meta.gas_argon.height_in_mm
 
-        # the offset between the lar volume and the world
-        lar_offset = (
-            cryostat_meta.inner.lower.thickness_in_mm
-            - (cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm) / 2.0
-        )
-    else:
-        lar_lv = world_lv
-        lar_height = 0.0
-        lar_offset = 0.0
-
+    # the offset between the lar volume and the world
+    lar_offset = (
+        cryostat_meta.inner.lower.thickness_in_mm
+        - (cryostat_meta.inner.lower.height_in_mm + cryostat_meta.inner.upper.height_in_mm) / 2.0
+    )
     # place the hpge and fibers
     reg = build_strings(
         lar_lv,
