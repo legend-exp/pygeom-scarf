@@ -55,6 +55,9 @@ def construct(
             cavern:
                 inner_radius_in_mm: 5000
                 outer_radius_in_mm: 12000
+            optical_properties:
+                lar_attenuation_length_in_cm: 100
+                lar_light_yield_in_ph_per_MeV: 10000
 
         - If the ``hpges`` key is present, the geometry will include HPGe detectors, which will be placed at the specified positions (in mm) from the bottom of the cryostat.
         - The ``source`` key can be used to place a source at a specified position from the bottom of the cryostat.
@@ -118,7 +121,14 @@ def construct(
 
     # build the cryostat, extract the height of the LAr volume
     # this is used to align the HPGe strings to the center of the lar
-    reg = build_cryostat(cryostat_meta, world_lv, reg, mats, plot=plot_cryostat)
+    reg = build_cryostat(
+        cryostat_meta,
+        world_lv,
+        reg,
+        mats,
+        plot=plot_cryostat,
+        optical_properties=config.get("optical_properties", {}),
+    )
     lar_lv = reg.logicalVolumeDict["lar"]
 
     # the height of the LAr

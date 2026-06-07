@@ -38,13 +38,18 @@ import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pint
 import pygeomoptics
 from dbetto import AttrsDict
 from matplotlib.patches import Polygon
+from pint import Quantity
 from pyg4ometry import geant4
+from pygeomoptics import lar, store
 from pygeomtools.materials import LegendMaterialRegistry
 
 from pygeomscarf.utils import _place_pv
+
+u = pint.get_application_registry()
 
 plt.rcParams["font.size"] = 12
 plt.rcParams["figure.dpi"] = 200
@@ -52,6 +57,49 @@ plt.rcParams["figure.dpi"] = 200
 log = logging.getLogger(__name__)
 
 TOL = 0.01  # mm, tolerance to avoid overlaps
+
+lar_attenuation_original_impl = lar.pyg4_lar_attach_attenuation
+
+
+@store.register_pluggable
+def get_lar_attenuation(
+    absl: None | Quantity = None,
+):
+    """Get the LAr attenuation model.
+
+    Parameters
+    ----------
+    absl
+        The absorption length to use. If None, the default value from the LAr attenuation model will be used.
+    """
+
+    def _lar_attach_attenuation(
+        lar_mat,
+        reg,
+        lar_temperature: Quantity,
+        _dielectric_method=None,
+        _attenuation=None,
+        _rayleigh=None,
+        _absorption=None,
+    ) -> None:
+
+        peak_rayl, _, _, _, _, _ = lar.lar_calculate_attenuation(
+            lar_temperature,
+            lar_dielectric_method="cern2020",
+            attenuation_method_or_length="legend200-llama",
+        )
+
+        lar_attenuation_original_impl(
+            lar_mat,
+            reg,
+            lar_temperature,
+            lar_dielectric_method="cern2020",
+            attenuation_method_or_length="legend200-llama",
+            rayleigh_enabled_or_length=peak_rayl,
+            absorption_enabled_or_length=absl,
+        )
+
+    return _lar_attach_attenuation
 
 
 def inner_cryostat_profile(cryostat_meta: AttrsDict) -> tuple[list, list]:
@@ -315,10 +363,10 @@ def set_steel_reflectivity(reg: geant4.Registry, cryostat_name: str, lar_name: s
     pygeomoptics.copper.pyg4_copper_attach_reflectivity(_to_steel, reg)
 
     cryostat = reg.physicalVolumeDict[cryostat_name]
-    lar = reg.physicalVolumeDict[lar_name]
+    lar_pv = reg.physicalVolumeDict[lar_name]
 
-    geant4.BorderSurface("bsurface_lar_cryostat", lar, cryostat, _to_steel, reg)
-    geant4.BorderSurface("bsurface_cryostat_lar", cryostat, lar, _to_steel, reg)
+    geant4.BorderSurface("bsurface_lar_cryostat", lar_pv, cryostat, _to_steel, reg)
+    geant4.BorderSurface("bsurface_cryostat_lar", cryostat, lar_pv, _to_steel, reg)
 
     return reg
 
@@ -330,6 +378,7 @@ def build_cryostat(
     mats: LegendMaterialRegistry,
     *,
     plot: bool = False,
+    optical_properties: None | dict = None,
 ) -> tuple[geant4.Registry, float, float]:
     """Construct the SCARF cryostat and LAr and add this to the
     geometry.
@@ -348,6 +397,9 @@ def build_cryostat(
         The registry to add the cryostat to.
     plot
         Flag to plot the profile of the cryostat volumes.
+    optical_properties
+        Dictionary of optical properties to set for the LAr, with keys "lar_attenuation
+        _length_in_cm". If not provided, the default values from the LAr attenuation model will be used.
     """
 
     profiles = {}
@@ -373,8 +425,17 @@ def build_cryostat(
     # now add the lar
     r_lar, z_lar = lar_profile(cryostat_meta)
 
-    lar = _construct_polycone("lar", r_lar, z_lar, reg, color=[0, 1, 1, 0.2], material=mats.liquidargon)
-    _place_pv("lar", lar, inner, z_pos=cryostat_meta.inner.lower.thickness_in_mm, reg=reg)
+    if optical_properties is not None and "lar_attenuation_length_in_cm" in optical_properties:
+        log.info(
+            "Setting LAr attenuation length to %.2f cm", optical_properties["lar_attenuation_length_in_cm"]
+        )
+        lar.pyg4_lar_attach_attenuation = get_lar_attenuation(
+            optical_properties["lar_attenuation_length_in_cm"] * u.cm
+        )
+
+    lar_pc = _construct_polycone("lar", r_lar, z_lar, reg, color=[0, 1, 1, 0.2], material=mats.liquidargon)
+
+    _place_pv("lar", lar_pc, inner, z_pos=cryostat_meta.inner.lower.thickness_in_mm, reg=reg)
 
     profiles["lar"] = {
         "radius": r_lar,
@@ -391,7 +452,7 @@ def build_cryostat(
     _place_pv(
         "gaseous_argon",
         gas,
-        lar,
+        lar_pc,
         z_pos=cryostat_meta.inner.lower.height_in_mm
         + cryostat_meta.inner.upper.height_in_mm
         - cryostat_meta.gas_argon.height_in_mm,
