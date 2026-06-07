@@ -96,7 +96,7 @@ def get_lar_attenuation(
             lar_dielectric_method="cern2020",
             attenuation_method_or_length="legend200-llama",
             rayleigh_enabled_or_length=peak_rayl,
-            absorption_enabled_or_length=absl,
+            absorption_enabled_or_length=(absl if absl is not None else peak_absl),
         )
 
     return _lar_attach_attenuation
