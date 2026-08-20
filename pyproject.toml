@@ -9,7 +9,9 @@ build-backend = "setuptools.build_meta"
 name = "pygeom_scarf"
 description = "Geometry model of the SCARF experiment"
 authors = [
+    { name = "Toby Dixon", email = "toby.dixon.23@ucl.ac.uk" },
     { name = "Luigi Pertoldi", email = "gipert@pm.me" },
+    { name = "Manuel Huber", email = "info@manuelhu.de" },
 ]
 maintainers = [
     { name = "The LEGEND Collaboration" },
