@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 title: pygeom-scarf
-doi: FILL-ME
-date-released: 2026-02-19
+doi: 10.5281/zenodo.22030137
+date-released: 2026-08-20
 message: "If you use this software, please cite it as below."
 authors:
   - family-names: Dixon
